@@ -303,11 +303,6 @@
     if (e.target.id === 'btnViewA'){ state.activeView = '1a'; applyTabStyles(); return; }
     if (e.target.id === 'btnViewB'){ state.activeView = '1b'; applyTabStyles(); return; }
     if (e.target.id === 'btnViewC'){ state.activeView = '1c'; applyTabStyles(); return; }
-    if (e.target.closest('#dateTrigger')){
-      var input = document.getElementById('datePicker');
-      try { input.showPicker(); } catch (err) { input.focus(); input.click(); }
-      return;
-    }
     if (e.target.id === 'printA'){ doPrint('1a'); return; }
     if (e.target.id === 'printB'){ doPrint('1b'); return; }
     if (e.target.id === 'printC'){ doPrint('1c'); return; }
