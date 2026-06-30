@@ -311,11 +311,23 @@
     if (e.target.id === 'resetC'){ resetOpt('1c'); return; }
   });
 
-  document.getElementById('datePicker').addEventListener('change', function(e){
+  var datePickerEl = document.getElementById('datePicker');
+
+  datePickerEl.addEventListener('change', function(e){
     var p = e.target.value.split('-');
     if (p.length === 3){
       state.selectedDate = new Date(+p[0], +p[1] - 1, +p[2]);
       render();
+    }
+  });
+
+  // Mobile opens the native picker on tap regardless of where on the input
+  // it lands, but desktop browsers only do that for the small calendar-icon
+  // hit area. Calling showPicker() from a direct click on the input covers
+  // desktop without affecting the mobile behavior.
+  datePickerEl.addEventListener('click', function(){
+    if (datePickerEl.showPicker){
+      try { datePickerEl.showPicker(); } catch (err) {}
     }
   });
 
