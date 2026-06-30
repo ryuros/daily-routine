@@ -17,9 +17,9 @@
     <h1 style="font-family:'Gowun Batang',serif; font-weight:700; font-size:40px; line-height:1.2; margin:0 0 14px; color:oklch(0.26 0.012 70);">Daily Routine</h1>
 
     <div style="position:relative; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-      <span id="todayLabelDate" style="font-size:13px; font-weight:700; color:oklch(0.32 0.012 70);"></span>
-      <button id="dateArrowBtn" class="no-print" aria-label="날짜 선택" style="display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; padding:0; border:none; background:transparent; cursor:pointer; color:oklch(0.55 0.012 70);">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      <button id="dateTrigger" type="button" class="no-print" aria-label="날짜 선택" style="display:inline-flex; align-items:center; gap:4px; padding:6px; margin:-6px; border:none; background:transparent; cursor:pointer; font-family:inherit;">
+        <span id="todayLabelDate" style="font-size:13px; font-weight:700; color:oklch(0.32 0.012 70);"></span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:oklch(0.55 0.012 70); flex:none;"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </button>
       <span style="font-size:13px; color:oklch(0.60 0.012 70);">일정을 보고 있어요</span>
       <input type="date" id="datePicker" style="position:absolute; top:0; left:0; opacity:0; pointer-events:none; width:1px; height:1px;">

@@ -303,7 +303,7 @@
     if (e.target.id === 'btnViewA'){ state.activeView = '1a'; applyTabStyles(); return; }
     if (e.target.id === 'btnViewB'){ state.activeView = '1b'; applyTabStyles(); return; }
     if (e.target.id === 'btnViewC'){ state.activeView = '1c'; applyTabStyles(); return; }
-    if (e.target.closest('#dateArrowBtn')){
+    if (e.target.closest('#dateTrigger')){
       var input = document.getElementById('datePicker');
       try { input.showPicker(); } catch (err) { input.focus(); input.click(); }
       return;
