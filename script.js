@@ -65,7 +65,7 @@
   }
   function formatDateLabel(d){
     var days = ['일', '월', '화', '수', '목', '금', '토'];
-    return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + days[d.getDay()] + '요일 일정을 보고 있어요';
+    return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + days[d.getDay()] + '요일';
   }
 
   var state = { selectedDate: todayDate(), activeView: '1a', checks: loadChecks() };
@@ -269,7 +269,7 @@
       evening: ebB.filter(function(x){ return x.start >= '18:00'; })
     };
 
-    document.getElementById('todayLabel').textContent = formatDateLabel(state.selectedDate);
+    document.getElementById('todayLabelDate').textContent = formatDateLabel(state.selectedDate);
     document.getElementById('dayLabelShort').textContent = (day === 'weekday' ? '평일' : '주말') + ' 진행률';
     document.getElementById('datePicker').value = dateKey(state.selectedDate);
 

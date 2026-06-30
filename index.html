@@ -16,27 +16,30 @@
   <header class="plan-intro" style="margin-bottom:40px;">
     <h1 style="font-family:'Gowun Batang',serif; font-weight:700; font-size:40px; line-height:1.2; margin:0 0 14px; color:oklch(0.26 0.012 70);">Daily Routine</h1>
 
-    <div style="position:relative; display:inline-flex; align-items:center; gap:6px;">
-      <span id="todayLabel" style="font-size:13px; color:oklch(0.60 0.012 70);"></span>
+    <div style="position:relative; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+      <span id="todayLabelDate" style="font-size:13px; font-weight:700; color:oklch(0.32 0.012 70);"></span>
       <button id="dateArrowBtn" class="no-print" aria-label="날짜 선택" style="display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; padding:0; border:none; background:transparent; cursor:pointer; color:oklch(0.55 0.012 70);">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </button>
+      <span style="font-size:13px; color:oklch(0.60 0.012 70);">일정을 보고 있어요</span>
       <input type="date" id="datePicker" style="position:absolute; top:0; left:0; opacity:0; pointer-events:none; width:1px; height:1px;">
     </div>
 
-    <div style="display:flex; flex-wrap:wrap; gap:14px 18px; font-size:12.5px; color:oklch(0.46 0.012 70); margin-top:24px;">
-      <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:9px;height:9px;border-radius:50%;background:oklch(0.74 0.018 70);"></span>일상·휴식</span>
-      <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:9px;height:9px;border-radius:50%;background:oklch(0.66 0.055 150);"></span>운동</span>
-      <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:9px;height:9px;border-radius:50%;background:oklch(0.62 0.06 245);"></span>한국사 공부</span>
-      <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:9px;height:9px;border-radius:50%;background:oklch(0.64 0.07 45);"></span>이직 준비</span>
-      <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:9px;height:9px;border-radius:50%;background:oklch(0.62 0.06 305);"></span>취미·창작</span>
-      <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:9px;height:9px;border-radius:50%;background:oklch(0.80 0.05 95);"></span>자유시간</span>
-    </div>
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-top:22px;">
+      <div class="no-print" style="display:inline-flex; padding:4px; background:oklch(0.95 0.006 80); border-radius:999px; gap:2px;">
+        <button id="btnViewA" style="padding:9px 22px;border:none;border-radius:999px;font-family:inherit;font-size:14px;cursor:pointer;transition:all .15s;">타임라인</button>
+        <button id="btnViewB" style="padding:9px 22px;border:none;border-radius:999px;font-family:inherit;font-size:14px;cursor:pointer;transition:all .15s;">블록 카드</button>
+        <button id="btnViewC" style="padding:9px 22px;border:none;border-radius:999px;font-family:inherit;font-size:14px;cursor:pointer;transition:all .15s;">라운드 시계</button>
+      </div>
 
-    <div class="no-print" style="display:inline-flex; padding:4px; background:oklch(0.95 0.006 80); border-radius:999px; gap:2px; margin-top:22px;">
-      <button id="btnViewA" style="padding:9px 22px;border:none;border-radius:999px;font-family:inherit;font-size:14px;cursor:pointer;transition:all .15s;">타임라인</button>
-      <button id="btnViewB" style="padding:9px 22px;border:none;border-radius:999px;font-family:inherit;font-size:14px;cursor:pointer;transition:all .15s;">블록 카드</button>
-      <button id="btnViewC" style="padding:9px 22px;border:none;border-radius:999px;font-family:inherit;font-size:14px;cursor:pointer;transition:all .15s;">라운드 시계</button>
+      <div style="display:flex; flex-wrap:wrap; gap:8px 12px; font-size:11px; color:oklch(0.46 0.012 70);">
+        <span style="display:inline-flex; align-items:center; gap:5px;"><span style="width:6px;height:6px;border-radius:50%;background:oklch(0.74 0.018 70);"></span>일상·휴식</span>
+        <span style="display:inline-flex; align-items:center; gap:5px;"><span style="width:6px;height:6px;border-radius:50%;background:oklch(0.66 0.055 150);"></span>운동</span>
+        <span style="display:inline-flex; align-items:center; gap:5px;"><span style="width:6px;height:6px;border-radius:50%;background:oklch(0.62 0.06 245);"></span>한국사 공부</span>
+        <span style="display:inline-flex; align-items:center; gap:5px;"><span style="width:6px;height:6px;border-radius:50%;background:oklch(0.64 0.07 45);"></span>이직 준비</span>
+        <span style="display:inline-flex; align-items:center; gap:5px;"><span style="width:6px;height:6px;border-radius:50%;background:oklch(0.62 0.06 305);"></span>취미·창작</span>
+        <span style="display:inline-flex; align-items:center; gap:5px;"><span style="width:6px;height:6px;border-radius:50%;background:oklch(0.80 0.05 95);"></span>자유시간</span>
+      </div>
     </div>
   </header>
 
