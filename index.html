@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>데일리 루틴</title>
+<title>Daily Routine</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -14,11 +14,17 @@
   button{ font-family:inherit; }
   a{ color:inherit; }
   ::selection{ background:oklch(0.88 0.04 200); }
+  .planpage{ padding:56px 28px 96px; }
+  .optcard{ padding:30px 34px; }
+  @media (max-width: 640px){
+    .planpage{ padding-left:20px; padding-right:20px; }
+    .optcard{ padding-left:16px; padding-right:16px; }
+  }
   @media print {
     .no-print{ display:none !important; }
     body{ background:#fff; }
     .planpage{ padding:0 !important; }
-    .optcard{ box-shadow:none !important; border:1px solid #ddd !important; break-inside:avoid; page-break-after:always; margin:0 0 16px !important; }
+    .optcard{ box-shadow:none !important; border:1px solid #ddd !important; break-inside:avoid; page-break-after:always; margin:0 0 16px !important; display:block !important; }
     .plan-intro{ display:none !important; }
     body[data-print="1a"] [data-opt]:not([data-opt="1a"]){ display:none !important; }
     body[data-print="1b"] [data-opt]:not([data-opt="1b"]){ display:none !important; }
@@ -29,39 +35,37 @@
 </head>
 <body>
 
-<div class="planpage" style="max-width:1080px; margin:0 auto; padding:56px 28px 96px;">
+<div class="planpage" style="max-width:1080px; margin:0 auto;">
 
   <header class="plan-intro" style="margin-bottom:40px;">
-    <div style="font-size:12px; letter-spacing:0.32em; color:oklch(0.62 0.012 70); margin-bottom:14px;">DAILY&nbsp;&nbsp;ROUTINE</div>
-    <h1 style="font-family:'Gowun Batang',serif; font-weight:700; font-size:40px; line-height:1.2; margin:0 0 14px; color:oklch(0.26 0.012 70);">데일리 루틴</h1>
-    <p style="font-size:15px; line-height:1.7; color:oklch(0.46 0.012 70); max-width:560px; margin:0 0 8px;">아침형(6시 기상 · 23시 취침) 기준으로, 한국사 공부 · 운동 · 기타 · 이직 준비 · 넉넉한 자유시간을 담았어요. <strong style="font-weight:600; color:oklch(0.34 0.012 70);">핵심 루틴만 고정</strong>이고 나머지는 자유롭게 흘러가도 괜찮아요.</p>
-    <p id="todayLabel" style="font-size:13px; color:oklch(0.60 0.012 70); margin:0;"></p>
+    <h1 style="font-family:'Gowun Batang',serif; font-weight:700; font-size:40px; line-height:1.2; margin:0 0 14px; color:oklch(0.26 0.012 70);">Daily Routine</h1>
 
-    <div style="display:flex; flex-wrap:wrap; gap:24px; align-items:center; margin-top:28px;">
-      <div class="no-print" style="display:inline-flex; padding:4px; background:oklch(0.95 0.006 80); border-radius:999px; gap:2px;">
-        <button id="btnWeekday" style="padding:9px 26px;border:none;border-radius:999px;font-family:inherit;font-size:14px;cursor:pointer;transition:all .15s;">평일</button>
-        <button id="btnWeekend" style="padding:9px 26px;border:none;border-radius:999px;font-family:inherit;font-size:14px;cursor:pointer;transition:all .15s;">주말</button>
-      </div>
-      <div style="display:flex; flex-wrap:wrap; gap:14px 18px; font-size:12.5px; color:oklch(0.46 0.012 70);">
-        <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:9px;height:9px;border-radius:50%;background:oklch(0.74 0.018 70);"></span>일상·휴식</span>
-        <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:9px;height:9px;border-radius:50%;background:oklch(0.66 0.055 150);"></span>운동</span>
-        <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:9px;height:9px;border-radius:50%;background:oklch(0.62 0.06 245);"></span>한국사 공부</span>
-        <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:9px;height:9px;border-radius:50%;background:oklch(0.64 0.07 45);"></span>이직 준비</span>
-        <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:9px;height:9px;border-radius:50%;background:oklch(0.62 0.06 305);"></span>취미·창작</span>
-        <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:9px;height:9px;border-radius:50%;background:oklch(0.80 0.05 95);"></span>자유시간</span>
-      </div>
+    <div style="position:relative; display:inline-flex; align-items:center; gap:6px;">
+      <span id="todayLabel" style="font-size:13px; color:oklch(0.60 0.012 70);"></span>
+      <button id="dateArrowBtn" class="no-print" aria-label="날짜 선택" style="display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; padding:0; border:none; background:transparent; cursor:pointer; color:oklch(0.55 0.012 70);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+      <input type="date" id="datePicker" style="position:absolute; top:0; left:0; opacity:0; pointer-events:none; width:1px; height:1px;">
     </div>
 
-    <div class="no-print" style="display:flex; gap:8px; align-items:center; margin-top:22px; font-size:13px; color:oklch(0.58 0.012 70); flex-wrap:wrap;">
-      <span>디자인 시안 3가지 →</span>
-      <a href="#1a" style="text-decoration:none; padding:3px 10px; border:1px solid oklch(0.88 0.008 75); border-radius:999px;">1a 타임라인</a>
-      <a href="#1b" style="text-decoration:none; padding:3px 10px; border:1px solid oklch(0.88 0.008 75); border-radius:999px;">1b 블록 카드</a>
-      <a href="#1c" style="text-decoration:none; padding:3px 10px; border:1px solid oklch(0.88 0.008 75); border-radius:999px;">1c 라운드 시계</a>
+    <div style="display:flex; flex-wrap:wrap; gap:14px 18px; font-size:12.5px; color:oklch(0.46 0.012 70); margin-top:24px;">
+      <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:9px;height:9px;border-radius:50%;background:oklch(0.74 0.018 70);"></span>일상·휴식</span>
+      <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:9px;height:9px;border-radius:50%;background:oklch(0.66 0.055 150);"></span>운동</span>
+      <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:9px;height:9px;border-radius:50%;background:oklch(0.62 0.06 245);"></span>한국사 공부</span>
+      <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:9px;height:9px;border-radius:50%;background:oklch(0.64 0.07 45);"></span>이직 준비</span>
+      <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:9px;height:9px;border-radius:50%;background:oklch(0.62 0.06 305);"></span>취미·창작</span>
+      <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:9px;height:9px;border-radius:50%;background:oklch(0.80 0.05 95);"></span>자유시간</span>
+    </div>
+
+    <div class="no-print" style="display:inline-flex; padding:4px; background:oklch(0.95 0.006 80); border-radius:999px; gap:2px; margin-top:22px;">
+      <button id="btnViewA" style="padding:9px 22px;border:none;border-radius:999px;font-family:inherit;font-size:14px;cursor:pointer;transition:all .15s;">타임라인</button>
+      <button id="btnViewB" style="padding:9px 22px;border:none;border-radius:999px;font-family:inherit;font-size:14px;cursor:pointer;transition:all .15s;">블록 카드</button>
+      <button id="btnViewC" style="padding:9px 22px;border:none;border-radius:999px;font-family:inherit;font-size:14px;cursor:pointer;transition:all .15s;">라운드 시계</button>
     </div>
   </header>
 
   <!-- ============ 1a TIMELINE ============ -->
-  <article id="1a" data-opt="1a" class="optcard" style="background:#fff; border:1px solid oklch(0.92 0.006 78); border-radius:22px; padding:30px 34px; margin-bottom:36px; box-shadow:0 1px 2px rgba(0,0,0,0.02), 0 18px 40px -28px rgba(0,0,0,0.12);">
+  <article id="1a" data-opt="1a" class="optcard" style="background:#fff; border:1px solid oklch(0.92 0.006 78); border-radius:22px; margin-bottom:36px; box-shadow:0 1px 2px rgba(0,0,0,0.02), 0 18px 40px -28px rgba(0,0,0,0.12);">
     <div style="display:flex; flex-wrap:wrap; gap:18px; justify-content:space-between; align-items:flex-start; margin-bottom:24px;">
       <div style="display:flex; gap:14px; align-items:center;">
         <span style="font-family:'Gowun Batang',serif; font-size:15px; padding:6px 11px; background:oklch(0.95 0.02 200); color:oklch(0.42 0.05 220); border-radius:10px;">1a</span>
@@ -86,7 +90,7 @@
   </article>
 
   <!-- ============ 1b BLOCK CARDS ============ -->
-  <article id="1b" data-opt="1b" class="optcard" style="background:#fff; border:1px solid oklch(0.92 0.006 78); border-radius:22px; padding:30px 34px; margin-bottom:36px; box-shadow:0 1px 2px rgba(0,0,0,0.02), 0 18px 40px -28px rgba(0,0,0,0.12);">
+  <article id="1b" data-opt="1b" class="optcard" style="background:#fff; border:1px solid oklch(0.92 0.006 78); border-radius:22px; margin-bottom:36px; box-shadow:0 1px 2px rgba(0,0,0,0.02), 0 18px 40px -28px rgba(0,0,0,0.12);">
     <div style="display:flex; flex-wrap:wrap; gap:18px; justify-content:space-between; align-items:flex-start; margin-bottom:24px;">
       <div style="display:flex; gap:14px; align-items:center;">
         <span style="font-family:'Gowun Batang',serif; font-size:15px; padding:6px 11px; background:oklch(0.95 0.02 200); color:oklch(0.42 0.05 220); border-radius:10px;">1b</span>
@@ -124,7 +128,7 @@
   </article>
 
   <!-- ============ 1c ROUND CLOCK ============ -->
-  <article id="1c" data-opt="1c" class="optcard" style="background:#fff; border:1px solid oklch(0.92 0.006 78); border-radius:22px; padding:30px 34px; margin-bottom:36px; box-shadow:0 1px 2px rgba(0,0,0,0.02), 0 18px 40px -28px rgba(0,0,0,0.12);">
+  <article id="1c" data-opt="1c" class="optcard" style="background:#fff; border:1px solid oklch(0.92 0.006 78); border-radius:22px; margin-bottom:36px; box-shadow:0 1px 2px rgba(0,0,0,0.02), 0 18px 40px -28px rgba(0,0,0,0.12);">
     <div style="display:flex; flex-wrap:wrap; gap:18px; justify-content:space-between; align-items:flex-start; margin-bottom:24px;">
       <div style="display:flex; gap:14px; align-items:center;">
         <span style="font-family:'Gowun Batang',serif; font-size:15px; padding:6px 11px; background:oklch(0.95 0.02 200); color:oklch(0.42 0.05 220); border-radius:10px;">1c</span>
@@ -158,16 +162,15 @@
     </div>
   </article>
 
-  <p class="no-print" style="text-align:center; font-size:12.5px; color:oklch(0.62 0.012 70); margin-top:8px;">마음에 드는 시안을 골라 알려주세요 — 하나로 다듬거나 자유롭게 수정해드릴게요.</p>
-
 </div>
 
 <script>
 (function(){
   "use strict";
 
-  var STORAGE_KEY = 't_plan_v1';
+  var STORAGE_KEY = 't_plan_v2';
   var RING = 'oklch(0.64 0.05 200)';
+  var VIEWS = ['1a', '1b', '1c'];
 
   var cats = {
     routine:  { label: '일상·휴식',   dot: 'oklch(0.74 0.018 70)',  soft: 'oklch(0.965 0.006 78)' },
@@ -217,12 +220,22 @@
   function saveChecks(checks){
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(checks)); } catch(e){}
   }
-  function realDayType(){
-    var d = new Date().getDay();
-    return (d === 0 || d === 6) ? 'weekend' : 'weekday';
+  function pad2(n){ return n < 10 ? '0' + n : '' + n; }
+  function todayDate(){
+    var n = new Date();
+    return new Date(n.getFullYear(), n.getMonth(), n.getDate());
+  }
+  function dateKey(d){ return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+  function dayTypeOf(d){
+    var w = d.getDay();
+    return (w === 0 || w === 6) ? 'weekend' : 'weekday';
+  }
+  function formatDateLabel(d){
+    var days = ['일', '월', '화', '수', '목', '금', '토'];
+    return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + days[d.getDay()] + '요일 일정을 보고 있어요';
   }
 
-  var state = { dayType: realDayType(), checks: loadChecks() };
+  var state = { selectedDate: todayDate(), activeView: '1a', checks: loadChecks() };
 
   function toMin(s){ var p = s.split(':'); return (+p[0]) * 60 + (+p[1]); }
 
@@ -237,22 +250,23 @@
   }
 
   function isChecked(opt, id){
-    var c = state.checks, d = state.dayType;
-    return !!(c[d] && c[d][opt] && c[d][opt][id]);
+    var c = state.checks, k = dateKey(state.selectedDate);
+    return !!(c[k] && c[k][opt] && c[k][opt][id]);
   }
 
   function toggle(opt, id){
-    var d = state.dayType;
-    state.checks[d] = state.checks[d] || {};
-    state.checks[d][opt] = state.checks[d][opt] || {};
-    if (state.checks[d][opt][id]) delete state.checks[d][opt][id];
-    else state.checks[d][opt][id] = true;
+    var k = dateKey(state.selectedDate);
+    state.checks[k] = state.checks[k] || {};
+    state.checks[k][opt] = state.checks[k][opt] || {};
+    if (state.checks[k][opt][id]) delete state.checks[k][opt][id];
+    else state.checks[k][opt][id] = true;
     saveChecks(state.checks);
     render();
   }
 
   function resetOpt(opt){
-    if (state.checks[state.dayType]) delete state.checks[state.dayType][opt];
+    var k = dateKey(state.selectedDate);
+    if (state.checks[k]) delete state.checks[k][opt];
     saveChecks(state.checks);
     render();
   }
@@ -271,12 +285,12 @@
       'background:' + (checked ? dot : '#fff') + ';';
   }
 
-  function enrich(b, opt, nowMin, viewingIsReal){
+  function enrich(b, opt, nowMin, isToday){
     var c = cats[b.cat];
     var checked = isChecked(opt, b.id);
     var startM = toMin(b.start);
     var endM = b.end ? toMin(b.end) : startM + 30;
-    var isNow = viewingIsReal && nowMin >= startM && nowMin < endM;
+    var isNow = isToday && nowMin >= startM && nowMin < endM;
     var titleStyle = checked
       ? 'text-decoration:line-through; color:oklch(0.68 0.01 70); opacity:0.7;'
       : 'color:oklch(0.28 0.012 70);';
@@ -358,7 +372,7 @@
     document.getElementById('blocksC').innerHTML = html;
   }
 
-  function buildClockSvg(items, nowMin, viewingIsReal){
+  function buildClockSvg(items, nowMin, isToday){
     var R = 140, cx = 160, cy = 160, hole = 84;
     function pol(r, a){ var rad = (a - 90) * Math.PI / 180; return [cx + r * Math.cos(rad), cy + r * Math.sin(rad)]; }
     var parts = [];
@@ -379,7 +393,7 @@
       var t = pol(R + 13, a);
       parts.push('<text x="' + t[0] + '" y="' + t[1] + '" font-size="11" fill="oklch(0.6 0.012 70)" text-anchor="middle" dominant-baseline="central" font-family="IBM Plex Sans KR">' + h + '시</text>');
     });
-    if (viewingIsReal){
+    if (isToday){
       var a = nowMin / 1440 * 360;
       var hp = pol(R - 4, a);
       parts.push('<line x1="' + cx + '" y1="' + cy + '" x2="' + hp[0] + '" y2="' + hp[1] + '" stroke="oklch(0.42 0.02 70)" stroke-width="2.5" stroke-linecap="round"></line>');
@@ -395,40 +409,45 @@
     return { done: done, total: total, pct: pct, ring: 'conic-gradient(' + RING + ' ' + pct + '%, oklch(0.92 0.006 78) 0)' };
   }
 
+  function applyTabStyles(){
+    var on = 'padding:9px 22px;border:none;border-radius:999px;font-family:inherit;font-size:14px;cursor:pointer;background:oklch(0.32 0.012 70);color:#fff;transition:all .15s;';
+    var off = 'padding:9px 22px;border:none;border-radius:999px;font-family:inherit;font-size:14px;cursor:pointer;background:transparent;color:oklch(0.48 0.012 70);transition:all .15s;';
+    document.getElementById('btnViewA').setAttribute('style', state.activeView === '1a' ? on : off);
+    document.getElementById('btnViewB').setAttribute('style', state.activeView === '1b' ? on : off);
+    document.getElementById('btnViewC').setAttribute('style', state.activeView === '1c' ? on : off);
+    VIEWS.forEach(function(v){
+      document.getElementById(v).style.display = (v === state.activeView) ? '' : 'none';
+    });
+  }
+
   function render(){
-    var day = state.dayType;
+    var day = dayTypeOf(state.selectedDate);
     var now = new Date();
     var nowMin = now.getHours() * 60 + now.getMinutes();
-    var viewingIsReal = day === realDayType();
+    var isToday = dateKey(state.selectedDate) === dateKey(todayDate());
     var raw = schedule[day];
 
-    var blocksA = raw.map(function(b){ return enrich(b, '1a', nowMin, viewingIsReal); });
-    var ebB = raw.map(function(b){ return enrich(b, '1b', nowMin, viewingIsReal); });
-    var blocksC = raw.map(function(b){ return enrich(b, '1c', nowMin, viewingIsReal); });
+    var blocksA = raw.map(function(b){ return enrich(b, '1a', nowMin, isToday); });
+    var ebB = raw.map(function(b){ return enrich(b, '1b', nowMin, isToday); });
+    var blocksC = raw.map(function(b){ return enrich(b, '1c', nowMin, isToday); });
     var blocksB = {
       morning: ebB.filter(function(x){ return x.start < '12:00'; }),
       afternoon: ebB.filter(function(x){ return x.start >= '12:00' && x.start < '18:00'; }),
       evening: ebB.filter(function(x){ return x.start >= '18:00'; })
     };
 
-    var days = ['일', '월', '화', '수', '목', '금', '토'];
-    var real = realDayType();
-    var realLabel = real === 'weekday' ? '평일' : '주말';
-    var viewing = day === 'weekday' ? '평일' : '주말';
-    document.getElementById('todayLabel').textContent = '오늘은 ' + days[now.getDay()] + '요일 · ' + realLabel + ' · 지금 ‘' + viewing + '’ 일정을 보고 있어요';
-    document.getElementById('dayLabelShort').textContent = viewing + ' 진행률';
+    document.getElementById('todayLabel').textContent = formatDateLabel(state.selectedDate);
+    document.getElementById('dayLabelShort').textContent = (day === 'weekday' ? '평일' : '주말') + ' 진행률';
+    document.getElementById('datePicker').value = dateKey(state.selectedDate);
 
-    var segOn = 'padding:9px 26px;border:none;border-radius:999px;font-family:inherit;font-size:14px;cursor:pointer;background:oklch(0.32 0.012 70);color:#fff;transition:all .15s;';
-    var segOff = 'padding:9px 26px;border:none;border-radius:999px;font-family:inherit;font-size:14px;cursor:pointer;background:transparent;color:oklch(0.48 0.012 70);transition:all .15s;';
-    document.getElementById('btnWeekday').setAttribute('style', day === 'weekday' ? segOn : segOff);
-    document.getElementById('btnWeekend').setAttribute('style', day === 'weekend' ? segOn : segOff);
+    applyTabStyles();
 
     renderBlocksA(blocksA);
     renderBlocksBCol('blocksB-morning', blocksB.morning);
     renderBlocksBCol('blocksB-afternoon', blocksB.afternoon);
     renderBlocksBCol('blocksB-evening', blocksB.evening);
     renderBlocksC(blocksC);
-    document.getElementById('clockSvg').innerHTML = buildClockSvg(blocksC, nowMin, viewingIsReal);
+    document.getElementById('clockSvg').innerHTML = buildClockSvg(blocksC, nowMin, isToday);
 
     var pA = prog(blocksA), pB = prog(ebB), pC = prog(blocksC);
     document.getElementById('ringA').style.background = pA.ring;
@@ -448,14 +467,28 @@
       toggle(parts[0], parts[1]);
       return;
     }
-    if (e.target.id === 'btnWeekday'){ state.dayType = 'weekday'; render(); return; }
-    if (e.target.id === 'btnWeekend'){ state.dayType = 'weekend'; render(); return; }
+    if (e.target.id === 'btnViewA'){ state.activeView = '1a'; applyTabStyles(); return; }
+    if (e.target.id === 'btnViewB'){ state.activeView = '1b'; applyTabStyles(); return; }
+    if (e.target.id === 'btnViewC'){ state.activeView = '1c'; applyTabStyles(); return; }
+    if (e.target.closest('#dateArrowBtn')){
+      var input = document.getElementById('datePicker');
+      try { input.showPicker(); } catch (err) { input.focus(); input.click(); }
+      return;
+    }
     if (e.target.id === 'printA'){ doPrint('1a'); return; }
     if (e.target.id === 'printB'){ doPrint('1b'); return; }
     if (e.target.id === 'printC'){ doPrint('1c'); return; }
     if (e.target.id === 'resetA'){ resetOpt('1a'); return; }
     if (e.target.id === 'resetB'){ resetOpt('1b'); return; }
     if (e.target.id === 'resetC'){ resetOpt('1c'); return; }
+  });
+
+  document.getElementById('datePicker').addEventListener('change', function(e){
+    var p = e.target.value.split('-');
+    if (p.length === 3){
+      state.selectedDate = new Date(+p[0], +p[1] - 1, +p[2]);
+      render();
+    }
   });
 
   render();
