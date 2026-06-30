@@ -1,3 +1,19 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+var firebaseConfig = {
+  apiKey: "AIzaSyAcrKtSZTcTlgEXKSOalo5XYiYqPrh2BZY",
+  authDomain: "daily-routine-d3b38.firebaseapp.com",
+  projectId: "daily-routine-d3b38",
+  storageBucket: "daily-routine-d3b38.firebasestorage.app",
+  messagingSenderId: "1067720448634",
+  appId: "1:1067720448634:web:a27046e8e7cf7ee666b9c3"
+};
+var SYNC_DOC_ID = "d7CKIRH_JFyWyMzAgG9sLD0nHw_P5yFn";
+var fbApp = initializeApp(firebaseConfig);
+var db = getFirestore(fbApp);
+var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
+
 (function(){
   "use strict";
 
@@ -53,6 +69,21 @@
   function saveChecks(checks){
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(checks)); } catch(e){}
   }
+
+  var applyingRemote = false;
+  var syncWriteTimer = null;
+  function pushChecksToCloud(){
+    clearTimeout(syncWriteTimer);
+    syncWriteTimer = setTimeout(function(){
+      setDoc(syncDocRef, { checks: JSON.stringify(state.checks), updatedAt: Date.now() })
+        .catch(function(e){ console.error('sync write failed', e); });
+    }, 400);
+  }
+  function persistChecks(){
+    saveChecks(state.checks);
+    if (!applyingRemote) pushChecksToCloud();
+  }
+
   function pad2(n){ return n < 10 ? '0' + n : '' + n; }
   function todayDate(){
     var n = new Date();
@@ -93,14 +124,14 @@
     state.checks[k][opt] = state.checks[k][opt] || {};
     if (state.checks[k][opt][id]) delete state.checks[k][opt][id];
     else state.checks[k][opt][id] = true;
-    saveChecks(state.checks);
+    persistChecks();
     render();
   }
 
   function resetOpt(opt){
     var k = dateKey(state.selectedDate);
     if (state.checks[k]) delete state.checks[k][opt];
-    saveChecks(state.checks);
+    persistChecks();
     render();
   }
 
@@ -330,6 +361,19 @@
       try { datePickerEl.showPicker(); } catch (err) {}
     }
   });
+
+  onSnapshot(syncDocRef, function(snap){
+    if (!snap.exists()) return;
+    var data = snap.data();
+    if (!data || typeof data.checks !== 'string') return;
+    var remoteChecks;
+    try { remoteChecks = JSON.parse(data.checks); } catch (e) { return; }
+    applyingRemote = true;
+    state.checks = remoteChecks;
+    saveChecks(remoteChecks);
+    render();
+    applyingRemote = false;
+  }, function(err){ console.error('sync listen failed', err); });
 
   render();
   setInterval(render, 60000);
