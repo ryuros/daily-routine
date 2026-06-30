@@ -137,7 +137,7 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
 
   function doPrint(opt){
     document.body.setAttribute('data-print', opt);
-    setTimeout(function(){ window.print(); }, 40);
+    window.print();
   }
   window.addEventListener('afterprint', function(){ document.body.removeAttribute('data-print'); });
 
