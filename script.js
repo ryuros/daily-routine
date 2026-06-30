@@ -154,7 +154,7 @@
     var html = arr.map(function(b){
       return '' +
       '<div style="display:flex; gap:16px; align-items:stretch;">' +
-        '<div style="width:54px; flex:none; text-align:right; padding-top:9px;">' +
+        '<div style="width:54px; flex:none; text-align:left; padding-top:9px;">' +
           '<div style="font-family:\'Gowun Batang\',serif; font-size:15px; color:oklch(0.34 0.012 70);">' + esc(b.start) + '</div>' +
           '<div style="font-size:10.5px; color:oklch(0.66 0.012 70); margin-top:1px;">' + esc(b.durLabel) + '</div>' +
         '</div>' +
