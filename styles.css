@@ -248,6 +248,8 @@ a{ color:inherit; }
   .edit-overlay{ align-items:flex-end; }
   .edit-modal{ width:100%; border-radius:4px 4px 0 0; max-height:92vh; }
   .edit-time{ width:76px; }
+  .edit-preset-section{ flex-direction:column; gap:10px; }
+  .edit-preset-item{ width:100%; }
 }
 
 @media print {
