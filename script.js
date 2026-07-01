@@ -497,9 +497,11 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
               '<input class="edit-time-inner" type="time" value="' + esc(end || '') + '" data-field="end">' +
             '</div>' +
           '</div>' +
-          '<input class="edit-title" type="text" value="' + esc(title) + '" data-field="title" placeholder="제목">' +
         '</div>' +
         '<div class="edit-r2">' +
+          '<input class="edit-title" type="text" value="' + esc(title) + '" data-field="title" placeholder="제목">' +
+        '</div>' +
+        '<div class="edit-r3">' +
           '<input class="edit-note" type="text" value="' + esc(note || '') + '" data-field="note" placeholder="메모">' +
         '</div>' +
       '</div>' +

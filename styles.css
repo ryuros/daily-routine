@@ -128,7 +128,7 @@ a{ color:inherit; }
   padding:0 24px 18px; flex-shrink:0;
 }
 .edit-preset-item{
-  flex:1; display:flex; flex-direction:column; align-items:flex-start; gap:4px;
+  flex:1; min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:4px;
 }
 .edit-preset-label{ font-size:12px; color:oklch(0.46 0.012 70); font-weight:500; }
 .edit-preset-input{
@@ -151,9 +151,8 @@ a{ color:inherit; }
 }
 .edit-rows{ flex:1; min-width:0; display:flex; flex-direction:column; gap:4px; }
 .edit-r1{ display:flex; gap:6px; align-items:stretch; }
-.edit-r1 .edit-color-select{ flex:1; }
-.edit-times{ flex:3; min-width:0; }
-.edit-r1 .edit-title{ flex:6; min-width:0; }
+.edit-r1 .edit-color-select{ flex:0 0 auto; }
+.edit-times{ flex:1; min-width:0; }
 .edit-time-range{
   display:flex; align-items:center;
   border:1px solid oklch(0.928 0.006 264.531); border-radius:8px;
@@ -168,7 +167,9 @@ a{ color:inherit; }
 .edit-time-range .edit-time-inner::-webkit-calendar-picker-indicator{ display:none; }
 .edit-time-range-sep{ font-size:11px; color:oklch(0.60 0.012 70); flex-shrink:0; }
 .edit-r2{ display:flex; }
-.edit-r2 .edit-note{ flex:1; width:100%; }
+.edit-r2 .edit-title{ flex:1; width:100%; }
+.edit-r3{ display:flex; }
+.edit-r3 .edit-note{ flex:1; width:100%; }
 .edit-item input,.edit-item select{
   border:1px solid oklch(0.928 0.006 264.531); border-radius:8px;
   padding:10px 12px; font-family:inherit; font-size:13px;
