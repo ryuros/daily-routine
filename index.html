@@ -4,140 +4,141 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Daily Routine</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/pretendard.css">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
+<!-- ===== Top Navigation ===== -->
+<nav class="top-nav no-print">
+  <span class="top-nav-title">Daily Routine</span>
+  <!-- 우측 메뉴 아이콘 자리 -->
+</nav>
+
 <div class="planpage" style="max-width:1080px; margin:0 auto;">
 
-  <header class="plan-intro" style="margin-bottom:40px;">
-    <h1 style="font-family:'Gowun Batang',serif; font-weight:700; font-size:40px; line-height:1.2; margin:0 0 14px; color:oklch(0.26 0.012 70);">Daily Routine</h1>
-
-    <div style="position:relative; display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-      <div id="dateTrigger" aria-hidden="true" style="display:inline-flex; align-items:center; gap:4px; padding:6px; margin:-6px; pointer-events:none;">
-        <span id="todayLabelDate" style="font-size:13px; font-weight:700; color:oklch(0.32 0.012 70);"></span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:oklch(0.55 0.012 70); flex:none;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+  <header class="plan-intro">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+      <div style="position:relative; display:inline-flex; align-items:center; gap:6px;">
+        <div id="dateTrigger" aria-hidden="true" style="display:inline-flex; align-items:center; gap:6px; pointer-events:none;">
+          <span id="todayLabelDate" style="font-size:24px; font-weight:700; color:oklch(0.26 0.012 70); line-height:1.2;"></span>
+          <svg width="12" height="8" viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" style="color:oklch(0.55 0.012 70); flex:none; margin-top:3px;"><path d="M2 2L10 10L18 2"/></svg>
+        </div>
+        <input type="date" id="datePicker" class="no-print" aria-label="날짜 선택" style="position:absolute; top:0; left:0; width:100%; height:100%; margin:0; padding:0; border:none; background:transparent; opacity:0; cursor:pointer; z-index:1;">
       </div>
-      <span style="font-size:13px; color:oklch(0.60 0.012 70);">일정을 보고 있어요</span>
-      <input type="date" id="datePicker" class="no-print" aria-label="날짜 선택" style="position:absolute; top:0; left:0; width:100%; height:100%; margin:0; padding:0; border:none; background:transparent; opacity:0; cursor:pointer; z-index:1;">
-    </div>
-
-    <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-top:22px;">
-      <div class="no-print" style="display:inline-flex; padding:4px; background:oklch(0.95 0.006 80); border-radius:999px; gap:2px;">
-        <button id="btnViewA" style="padding:9px 22px;border:none;border-radius:999px;font-family:inherit;font-size:14px;cursor:pointer;transition:all .15s;">타임라인</button>
-        <button id="btnViewB" style="padding:9px 22px;border:none;border-radius:999px;font-family:inherit;font-size:14px;cursor:pointer;transition:all .15s;">블록 카드</button>
-        <button id="btnViewC" style="padding:9px 22px;border:none;border-radius:999px;font-family:inherit;font-size:14px;cursor:pointer;transition:all .15s;">라운드 시계</button>
-      </div>
-
-      <div style="display:flex; flex-wrap:wrap; gap:8px 12px; font-size:11px; color:oklch(0.46 0.012 70);">
-        <span style="display:inline-flex; align-items:center; gap:5px;"><span style="width:6px;height:6px;border-radius:50%;background:oklch(0.74 0.018 70);"></span>일상·휴식</span>
-        <span style="display:inline-flex; align-items:center; gap:5px;"><span style="width:6px;height:6px;border-radius:50%;background:oklch(0.66 0.055 150);"></span>운동</span>
-        <span style="display:inline-flex; align-items:center; gap:5px;"><span style="width:6px;height:6px;border-radius:50%;background:oklch(0.62 0.06 245);"></span>한국사 공부</span>
-        <span style="display:inline-flex; align-items:center; gap:5px;"><span style="width:6px;height:6px;border-radius:50%;background:oklch(0.64 0.07 45);"></span>이직 준비</span>
-        <span style="display:inline-flex; align-items:center; gap:5px;"><span style="width:6px;height:6px;border-radius:50%;background:oklch(0.62 0.06 305);"></span>취미·창작</span>
-        <span style="display:inline-flex; align-items:center; gap:5px;"><span style="width:6px;height:6px;border-radius:50%;background:oklch(0.80 0.05 95);"></span>자유시간</span>
+      <div class="no-print" style="display:flex; gap:4px; flex-shrink:0; align-items:center;">
+        <button id="printCurrent" style="width:34px; height:34px; padding:0; border:1px solid oklch(0.929 0.013 255.508); background:transparent; border-radius:999px; cursor:pointer; color:oklch(0.46 0.012 70); display:flex; align-items:center; justify-content:center;" aria-label="인쇄">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        </button>
       </div>
     </div>
   </header>
 
   <!-- ============ 1a TIMELINE ============ -->
-  <article id="1a" data-opt="1a" class="optcard" style="background:#fff; border:1px solid oklch(0.92 0.006 78); border-radius:22px; margin-bottom:36px; box-shadow:0 1px 2px rgba(0,0,0,0.02), 0 18px 40px -28px rgba(0,0,0,0.12);">
-    <div style="display:flex; flex-wrap:wrap; gap:18px; justify-content:space-between; align-items:flex-start; margin-bottom:24px;">
-      <div style="display:flex; gap:14px; align-items:center;">
-        <div>
-          <div style="font-size:18px; font-weight:600; color:oklch(0.28 0.012 70);">타임라인</div>
-          <div style="font-size:13px; color:oklch(0.56 0.012 70);">하루를 시간 순서대로 따라가는 세로 타임라인</div>
-        </div>
-      </div>
-      <div style="display:flex; gap:16px; align-items:center;">
-        <div style="position:relative; width:54px; height:54px; border-radius:50%;" id="ringA">
-          <div style="position:absolute; inset:6px; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; color:oklch(0.40 0.04 210);" id="pctA"></div>
-        </div>
-        <div style="font-size:12.5px; color:oklch(0.56 0.012 70); min-width:64px;" id="countA"></div>
-        <div class="no-print" style="display:flex; gap:8px;">
-          <button id="printA" style="font-size:12.5px; padding:7px 13px; border:1px solid oklch(0.86 0.008 75); background:#fff; border-radius:9px; cursor:pointer; color:oklch(0.40 0.012 70);">인쇄</button>
-          <button id="resetA" style="font-size:12.5px; padding:7px 13px; border:1px solid oklch(0.90 0.008 75); background:oklch(0.97 0.005 80); border-radius:9px; cursor:pointer; color:oklch(0.56 0.012 70);">초기화</button>
-        </div>
-      </div>
-    </div>
+  <article id="1a" data-opt="1a" class="optcard" style="background:#fff; border:1px solid oklch(0.968 0.007 247.896); border-radius:24px; margin-bottom:36px; box-shadow:0 1px 2px rgba(0,0,0,0.02), 0 18px 40px -28px rgba(0,0,0,0.12);">
 
-    <div id="blocksA"></div>
-  </article>
-
-  <!-- ============ 1b BLOCK CARDS ============ -->
-  <article id="1b" data-opt="1b" class="optcard" style="background:#fff; border:1px solid oklch(0.92 0.006 78); border-radius:22px; margin-bottom:36px; box-shadow:0 1px 2px rgba(0,0,0,0.02), 0 18px 40px -28px rgba(0,0,0,0.12);">
-    <div style="display:flex; flex-wrap:wrap; gap:18px; justify-content:space-between; align-items:flex-start; margin-bottom:24px;">
-      <div style="display:flex; gap:14px; align-items:center;">
-        <div>
-          <div style="font-size:18px; font-weight:600; color:oklch(0.28 0.012 70);">블록 카드</div>
-          <div style="font-size:13px; color:oklch(0.56 0.012 70);">오전 · 오후 · 저녁 세 블록으로 나눈 카드형</div>
-        </div>
-      </div>
-      <div style="display:flex; gap:16px; align-items:center;">
-        <div style="position:relative; width:54px; height:54px; border-radius:50%;" id="ringB">
-          <div style="position:absolute; inset:6px; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; color:oklch(0.40 0.04 210);" id="pctB"></div>
-        </div>
-        <div style="font-size:12.5px; color:oklch(0.56 0.012 70); min-width:64px;" id="countB"></div>
-        <div class="no-print" style="display:flex; gap:8px;">
-          <button id="printB" style="font-size:12.5px; padding:7px 13px; border:1px solid oklch(0.86 0.008 75); background:#fff; border-radius:9px; cursor:pointer; color:oklch(0.40 0.012 70);">인쇄</button>
-          <button id="resetB" style="font-size:12.5px; padding:7px 13px; border:1px solid oklch(0.90 0.008 75); background:oklch(0.97 0.005 80); border-radius:9px; cursor:pointer; color:oklch(0.56 0.012 70);">초기화</button>
-        </div>
-      </div>
-    </div>
-
-    <div style="display:flex; flex-wrap:wrap; gap:18px;">
-      <div style="flex:1; min-width:240px;">
-        <div style="font-size:13px; font-weight:600; color:oklch(0.48 0.012 70); margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid oklch(0.93 0.006 78);">🌅 오전</div>
-        <div id="blocksB-morning" style="display:flex; flex-direction:column; gap:10px;"></div>
-      </div>
-      <div style="flex:1; min-width:240px;">
-        <div style="font-size:13px; font-weight:600; color:oklch(0.48 0.012 70); margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid oklch(0.93 0.006 78);">☀️ 오후</div>
-        <div id="blocksB-afternoon" style="display:flex; flex-direction:column; gap:10px;"></div>
-      </div>
-      <div style="flex:1; min-width:240px;">
-        <div style="font-size:13px; font-weight:600; color:oklch(0.48 0.012 70); margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid oklch(0.93 0.006 78);">🌙 저녁</div>
-        <div id="blocksB-evening" style="display:flex; flex-direction:column; gap:10px;"></div>
-      </div>
-    </div>
-  </article>
-
-  <!-- ============ 1c ROUND CLOCK ============ -->
-  <article id="1c" data-opt="1c" class="optcard" style="background:#fff; border:1px solid oklch(0.92 0.006 78); border-radius:22px; margin-bottom:36px; box-shadow:0 1px 2px rgba(0,0,0,0.02), 0 18px 40px -28px rgba(0,0,0,0.12);">
-    <div style="display:flex; flex-wrap:wrap; gap:18px; justify-content:space-between; align-items:flex-start; margin-bottom:24px;">
-      <div style="display:flex; gap:14px; align-items:center;">
-        <div>
-          <div style="font-size:18px; font-weight:600; color:oklch(0.28 0.012 70);">라운드 시계</div>
-          <div style="font-size:13px; color:oklch(0.56 0.012 70);">24시간 원형 시계로 하루를 한눈에</div>
-        </div>
-      </div>
-      <div style="display:flex; gap:16px; align-items:center;">
-        <div style="font-size:12.5px; color:oklch(0.56 0.012 70); min-width:64px;" id="countC"></div>
-        <div class="no-print" style="display:flex; gap:8px;">
-          <button id="printC" style="font-size:12.5px; padding:7px 13px; border:1px solid oklch(0.86 0.008 75); background:#fff; border-radius:9px; cursor:pointer; color:oklch(0.40 0.012 70);">인쇄</button>
-          <button id="resetC" style="font-size:12.5px; padding:7px 13px; border:1px solid oklch(0.90 0.008 75); background:oklch(0.97 0.005 80); border-radius:9px; cursor:pointer; color:oklch(0.56 0.012 70);">초기화</button>
-        </div>
-      </div>
-    </div>
-
-    <div style="display:flex; flex-wrap:wrap; gap:36px; align-items:center;">
-      <div style="flex:1; min-width:280px; display:flex; justify-content:center; position:relative;">
-        <div style="position:relative; width:100%; max-width:340px;" id="clockWrap">
-          <div id="clockSvg"></div>
+    <div class="timeline-layout">
+      <!-- 원형 시계 -->
+      <div class="timeline-clock">
+        <div style="position:relative; width:100%; max-width:360px; margin:0 auto;">
+          <div id="clockSvgTop"></div>
           <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; pointer-events:none;">
-            <div id="pctC" style="font-family:'Gowun Batang',serif; font-size:34px; font-weight:700; color:oklch(0.36 0.04 210); line-height:1;"></div>
-            <div id="dayLabelShort" style="font-size:11.5px; color:oklch(0.58 0.012 70); margin-top:6px;"></div>
+            <div id="pctAclock" style="font-size:28px; font-weight:700; color:oklch(0.30 0.012 70); line-height:1;"></div>
+            <div id="dayLabelShort" style="font-size:11px; color:oklch(0.58 0.012 70); margin-top:5px;"></div>
           </div>
         </div>
+        <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-top:24px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:oklch(0.30 0.012 70); flex-shrink:0;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <div id="currentTimeClock" style="font-size:28px; font-weight:700; color:oklch(0.30 0.012 70); letter-spacing:0.02em;"></div>
+        </div>
       </div>
-      <div style="flex:1; min-width:280px;">
-        <div id="blocksC" style="display:flex; flex-direction:column; gap:7px;"></div>
+      <!-- 타임라인 리스트 -->
+      <div class="timeline-list">
+        <div class="no-print" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:32px;">
+          <button id="applyDefault" style="height:34px; padding:0 14px; border:1px solid oklch(0.929 0.013 255.508); border-radius:999px; background:transparent; cursor:pointer; font-family:inherit; font-size:12.5px; color:oklch(0.446 0.043 257.281);">기본 루틴 적용하기</button>
+          <div style="display:flex; gap:4px; align-items:center;">
+            <button id="resetCurrent" style="width:34px; height:34px; padding:0; border:1px solid oklch(0.929 0.013 255.508); background:transparent; border-radius:999px; cursor:pointer; color:oklch(0.46 0.012 70); display:flex; align-items:center; justify-content:center;" aria-label="초기화">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-4.8"></path></svg>
+            </button>
+            <button id="editBtn" style="height:34px; padding:0 12px; border:none; background:oklch(0.372 0.044 257.287); border-radius:999px; cursor:pointer; color:#fff; display:flex; align-items:center; gap:5px; font-family:inherit; font-size:12.5px;" aria-label="편집">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+              편집
+            </button>
+          </div>
+        </div>
+        <div id="blocksA"></div>
       </div>
     </div>
   </article>
 
+  <!-- ============ 1b BOARD ============ -->
+  <article id="1b" data-opt="1b" class="optcard" style="display:none;">
+    <div class="board-cols" style="display:flex; flex-wrap:wrap; gap:18px;">
+      <div style="flex:1; min-width:220px;">
+        <div class="board-col-head">
+          <span class="board-col-dot" style="background:oklch(0.72 0.012 70);"></span>
+          <span class="board-col-label">실행전</span>
+          <span id="countNotStarted" class="board-col-count"></span>
+        </div>
+        <div id="blocksB-notStarted" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+      <div style="flex:1; min-width:220px;">
+        <div class="board-col-head">
+          <span class="board-col-dot" style="background:oklch(0.62 0.09 145);"></span>
+          <span class="board-col-label">실행완료</span>
+          <span id="countCompleted" class="board-col-count"></span>
+        </div>
+        <div id="blocksB-completed" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+      <div style="flex:1; min-width:220px;">
+        <div class="board-col-head">
+          <span class="board-col-dot" style="background:oklch(0.66 0.10 45);"></span>
+          <span class="board-col-label">미완료</span>
+          <span id="countIncomplete" class="board-col-count"></span>
+        </div>
+        <div id="blocksB-incomplete" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+    </div>
+  </article>
+
+  <div style="height:40px;"></div>
+
+</div>
+
+<!-- ===== Floating Tab Bar ===== -->
+<div class="tab-floating no-print">
+  <button id="btnViewA" class="tab-btn">Timeline</button>
+  <button id="btnViewB" class="tab-btn">Board</button>
+</div>
+
+<!-- ===== 편집 모달 ===== -->
+<div id="editOverlay" class="edit-overlay hidden" role="dialog" aria-modal="true">
+  <div class="edit-modal">
+    <div class="edit-modal-head">
+      <span id="editDateLabel" style="font-size:20px; font-weight:700; color:oklch(0.26 0.012 70);"></span>
+      <button id="editClose" class="edit-close-btn" aria-label="닫기">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <div class="edit-preset-section">
+      <div class="edit-preset-item">
+        <span class="edit-preset-label">기상시간</span>
+        <input type="time" id="presetWake" class="edit-preset-input">
+      </div>
+      <div class="edit-preset-item">
+        <span class="edit-preset-label">취침시간</span>
+        <input type="time" id="presetSleep" class="edit-preset-input">
+      </div>
+    </div>
+    <div class="edit-modal-body" id="editBody"></div>
+    <div class="edit-modal-foot">
+      <button id="editAddItem">+ 항목 추가</button>
+      <div style="display:flex; gap:8px;">
+        <button id="editCancel">취소</button>
+        <button id="editSave">저장</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script type="module" src="script.js"></script>
