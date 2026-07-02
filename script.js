@@ -421,10 +421,6 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
     if (e.target.id === 'btnViewA'){ state.activeView = '1a'; applyTabStyles(); return; }
     if (e.target.id === 'btnViewB'){ state.activeView = '1b'; applyTabStyles(); return; }
     if (e.target.closest('#printCurrent')){ doPrint(state.activeView); return; }
-    if (e.target.closest('#forceSyncBtn')){
-      if (confirm('이 기기의 데이터를 다른 기기에 덮어쓰시겠어요?')) pushScheduleToCloud();
-      return;
-    }
     if (e.target.closest('#resetCurrent')){ resetOpt(state.activeView); return; }
     if (e.target.closest('#editBtn')){ openEditModal(); return; }
     if (e.target.id === 'applyDefault'){ applyDefaultSchedule(dayTypeOf(state.selectedDate)); return; }

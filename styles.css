@@ -47,7 +47,8 @@ a{ color:inherit; }
 .timeline-layout{
   display:flex;
   flex-wrap:wrap;
-  gap:80px;
+  column-gap:80px;
+  row-gap:40px;
   align-items:flex-start;
   justify-content:center;
 }
