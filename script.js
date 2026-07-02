@@ -102,6 +102,7 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
     return {
       checks: JSON.stringify(state.checks),
       schedule: JSON.stringify({ weekday: schedule.weekday, weekend: schedule.weekend }),
+      presets: JSON.stringify(presets),
       updatedAt: Date.now()
     };
   }
@@ -420,6 +421,10 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
     if (e.target.id === 'btnViewA'){ state.activeView = '1a'; applyTabStyles(); return; }
     if (e.target.id === 'btnViewB'){ state.activeView = '1b'; applyTabStyles(); return; }
     if (e.target.closest('#printCurrent')){ doPrint(state.activeView); return; }
+    if (e.target.closest('#forceSyncBtn')){
+      if (confirm('이 기기의 데이터를 다른 기기에 덮어쓰시겠어요?')) pushScheduleToCloud();
+      return;
+    }
     if (e.target.closest('#resetCurrent')){ resetOpt(state.activeView); return; }
     if (e.target.closest('#editBtn')){ openEditModal(); return; }
     if (e.target.id === 'applyDefault'){ applyDefaultSchedule(dayTypeOf(state.selectedDate)); return; }
@@ -464,6 +469,16 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
           schedule.weekday = remoteSchedule.weekday;
           schedule.weekend = remoteSchedule.weekend;
           try { localStorage.setItem(SCHEDULE_KEY, data.schedule); } catch(e){}
+        }
+      } catch(e){}
+    }
+    if (typeof data.presets === 'string'){
+      try {
+        var remotePresets = JSON.parse(data.presets);
+        if (remotePresets && remotePresets.wake && remotePresets.sleep){
+          presets.wake  = remotePresets.wake;
+          presets.sleep = remotePresets.sleep;
+          savePresets();
         }
       } catch(e){}
     }
