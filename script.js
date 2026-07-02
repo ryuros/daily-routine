@@ -98,12 +98,23 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
 
   var applyingRemote = false;
   var syncWriteTimer = null;
+  function buildCloudPayload(){
+    return {
+      checks: JSON.stringify(state.checks),
+      schedule: JSON.stringify({ weekday: schedule.weekday, weekend: schedule.weekend }),
+      updatedAt: Date.now()
+    };
+  }
   function pushChecksToCloud(){
     clearTimeout(syncWriteTimer);
     syncWriteTimer = setTimeout(function(){
-      setDoc(syncDocRef, { checks: JSON.stringify(state.checks), updatedAt: Date.now() })
+      setDoc(syncDocRef, buildCloudPayload())
         .catch(function(e){ console.error('sync write failed', e); });
     }, 400);
+  }
+  function pushScheduleToCloud(){
+    setDoc(syncDocRef, buildCloudPayload())
+      .catch(function(e){ console.error('schedule sync failed', e); });
   }
   function persistChecks(){
     saveChecks(state.checks);
@@ -357,6 +368,7 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
     if (!confirm((dayType === 'weekday' ? '평일' : '주말') + ' 기본 루틴을 적용하면 현재 루틴이 초기화됩니다. 계속할까요?')) return;
     schedule[dayType] = JSON.parse(JSON.stringify(DEFAULT_SCHEDULE[dayType]));
     try { localStorage.setItem(SCHEDULE_KEY, JSON.stringify({ weekday: schedule.weekday, weekend: schedule.weekend })); } catch(e){}
+    pushScheduleToCloud();
     render();
   }
 
@@ -436,12 +448,25 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
   onSnapshot(syncDocRef, function(snap){
     if (!snap.exists()) return;
     var data = snap.data();
-    if (!data || typeof data.checks !== 'string') return;
-    var remoteChecks;
-    try { remoteChecks = JSON.parse(data.checks); } catch (e) { return; }
+    if (!data) return;
     applyingRemote = true;
-    state.checks = remoteChecks;
-    saveChecks(remoteChecks);
+    if (typeof data.checks === 'string'){
+      try {
+        var remoteChecks = JSON.parse(data.checks);
+        state.checks = remoteChecks;
+        saveChecks(remoteChecks);
+      } catch(e){}
+    }
+    if (typeof data.schedule === 'string'){
+      try {
+        var remoteSchedule = JSON.parse(data.schedule);
+        if (remoteSchedule && Array.isArray(remoteSchedule.weekday) && Array.isArray(remoteSchedule.weekend)){
+          schedule.weekday = remoteSchedule.weekday;
+          schedule.weekend = remoteSchedule.weekend;
+          try { localStorage.setItem(SCHEDULE_KEY, data.schedule); } catch(e){}
+        }
+      } catch(e){}
+    }
     render();
     applyingRemote = false;
   }, function(err){ console.error('sync listen failed', err); });
@@ -585,6 +610,7 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
     });
     schedule[editDayType] = newItems;
     try { localStorage.setItem(SCHEDULE_KEY, JSON.stringify({ weekday: schedule.weekday, weekend: schedule.weekend })); } catch(e){}
+    pushScheduleToCloud();
     var wakeEl  = document.getElementById('presetWake');
     var sleepEl = document.getElementById('presetSleep');
     if (wakeEl && wakeEl.value)  { presets.wake  = wakeEl.value; }
