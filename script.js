@@ -522,7 +522,15 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
   }
 
   function buildEditItemHtml(id, start, end, title, catKey, note){
+    var dragHandle = '<div class="edit-drag-handle" title="드래그로 순서 변경">' +
+      '<svg width="14" height="20" viewBox="0 0 14 20" fill="currentColor">' +
+        '<circle cx="4" cy="4" r="1.5"/><circle cx="10" cy="4" r="1.5"/>' +
+        '<circle cx="4" cy="10" r="1.5"/><circle cx="10" cy="10" r="1.5"/>' +
+        '<circle cx="4" cy="16" r="1.5"/><circle cx="10" cy="16" r="1.5"/>' +
+      '</svg>' +
+    '</div>';
     return '<div class="edit-item" data-id="' + esc(id) + '">' +
+      dragHandle +
       '<div class="edit-rows">' +
         '<div class="edit-r1">' +
           buildColorPicker(catKey) +
@@ -543,6 +551,57 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
       '</div>' +
       '<button class="edit-del-btn" type="button" aria-label="삭제"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>' +
     '</div>';
+  }
+
+  function makeDraggable(body){
+    var dragging = null, ghost = null, placeholder = null;
+    function evY(e){ return e.touches ? e.touches[0].clientY : e.clientY; }
+    function onStart(e){
+      if (!e.target.closest('.edit-drag-handle')) return;
+      e.preventDefault();
+      dragging = e.target.closest('.edit-item');
+      var rect = dragging.getBoundingClientRect();
+      var dy = evY(e) - rect.top;
+      placeholder = document.createElement('div');
+      placeholder.className = 'edit-placeholder';
+      placeholder.style.cssText = 'height:' + rect.height + 'px;';
+      dragging.parentNode.insertBefore(placeholder, dragging);
+      ghost = dragging.cloneNode(true);
+      ghost.style.cssText = 'position:fixed;left:' + rect.left + 'px;top:' + rect.top + 'px;width:' + rect.width + 'px;z-index:1000;opacity:0.9;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,0.18);border-radius:12px;';
+      document.body.appendChild(ghost);
+      dragging.style.opacity = '0';
+      function onMove(e){
+        e.preventDefault();
+        var y = evY(e);
+        ghost.style.top = (y - dy) + 'px';
+        var items = Array.from(body.querySelectorAll('.edit-item'));
+        var after = null;
+        for (var i = 0; i < items.length; i++){
+          if (items[i] === dragging) continue;
+          var r = items[i].getBoundingClientRect();
+          if (y < r.top + r.height / 2){ after = items[i]; break; }
+        }
+        if (after) body.insertBefore(placeholder, after);
+        else body.appendChild(placeholder);
+      }
+      function onEnd(){
+        placeholder.parentNode.insertBefore(dragging, placeholder);
+        placeholder.remove();
+        ghost.remove();
+        dragging.style.opacity = '';
+        dragging = ghost = placeholder = null;
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('touchmove', onMove);
+        document.removeEventListener('mouseup', onEnd);
+        document.removeEventListener('touchend', onEnd);
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('touchmove', onMove, {passive:false});
+      document.addEventListener('mouseup', onEnd);
+      document.addEventListener('touchend', onEnd);
+    }
+    body.addEventListener('mousedown', onStart);
+    body.addEventListener('touchstart', onStart, {passive:false});
   }
 
   function attachEditListeners(container){
@@ -587,6 +646,7 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
     var body = document.getElementById('editBody');
     body.innerHTML = html;
     attachEditListeners(body);
+    makeDraggable(body);
   }
 
   function addEditItem(){
