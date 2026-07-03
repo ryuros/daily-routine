@@ -31,24 +31,24 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
 
   // Tailwind 400 (dot) / 50 (soft) color palette
   var cats = {
-    red:     { dot: '#f87171', soft: '#fef2f2' },
-    orange:  { dot: '#fb923c', soft: '#fff7ed' },
-    amber:   { dot: '#fbbf24', soft: '#fffbeb' },
-    yellow:  { dot: '#facc15', soft: '#fefce8' },
-    lime:    { dot: '#a3e635', soft: '#f7fee7' },
-    green:   { dot: 'oklch(0.841 0.238 128.85)', soft: '#f0fdf4' },
-    emerald: { dot: '#34d399', soft: '#ecfdf5' },
-    teal:    { dot: '#2dd4bf', soft: '#f0fdfa' },
-    cyan:    { dot: '#22d3ee', soft: '#ecfeff' },
-    sky:     { dot: '#38bdf8', soft: '#f0f9ff' },
-    blue:    { dot: '#60a5fa', soft: '#eff6ff' },
-    indigo:  { dot: 'oklch(0.81 0.117 11.638)', soft: '#eef2ff' },
-    violet:  { dot: '#a78bfa', soft: '#f5f3ff' },
-    purple:  { dot: '#c084fc', soft: '#faf5ff' },
-    fuchsia: { dot: '#e879f9', soft: '#fdf4ff' },
-    pink:    { dot: '#f472b6', soft: '#fdf2f8' },
-    rose:    { dot: '#fb7185', soft: '#fff1f2' },
-    slate:   { dot: '#94a3b8', soft: '#f8fafc' }
+    red:     { dot: '#f87171', soft: '#fef2f2', label: '빨강' },
+    orange:  { dot: '#fb923c', soft: '#fff7ed', label: '주황' },
+    amber:   { dot: '#fbbf24', soft: '#fffbeb', label: '취미' },
+    yellow:  { dot: '#facc15', soft: '#fefce8', label: '노랑' },
+    lime:    { dot: '#a3e635', soft: '#f7fee7', label: '라임' },
+    green:   { dot: 'oklch(0.841 0.238 128.85)', soft: '#f0fdf4', label: '운동' },
+    emerald: { dot: '#34d399', soft: '#ecfdf5', label: '에메랄드' },
+    teal:    { dot: '#2dd4bf', soft: '#f0fdfa', label: '휴식' },
+    cyan:    { dot: '#22d3ee', soft: '#ecfeff', label: '사이언' },
+    sky:     { dot: '#38bdf8', soft: '#f0f9ff', label: '스카이' },
+    blue:    { dot: '#60a5fa', soft: '#eff6ff', label: '공부' },
+    indigo:  { dot: 'oklch(0.81 0.117 11.638)', soft: '#eef2ff', label: '커리어' },
+    violet:  { dot: '#a78bfa', soft: '#f5f3ff', label: '여가' },
+    purple:  { dot: '#c084fc', soft: '#faf5ff', label: '보라' },
+    fuchsia: { dot: '#e879f9', soft: '#fdf4ff', label: '퓨시아' },
+    pink:    { dot: '#f472b6', soft: '#fdf2f8', label: '핑크' },
+    rose:    { dot: '#fb7185', soft: '#fff1f2', label: '로즈' },
+    slate:   { dot: '#94a3b8', soft: '#f8fafc', label: '일상' }
   };
   // Migration map for old category keys → color key
   var CAT_MIGRATION = {
@@ -333,6 +333,14 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
       var p0 = pol(R, a0), p1 = pol(R, a1);
       var d = 'M ' + cx + ' ' + cy + ' L ' + p0[0] + ' ' + p0[1] + ' A ' + R + ' ' + R + ' 0 ' + large + ' 1 ' + p1[0] + ' ' + p1[1] + ' Z';
       parts.push('<path d="' + d + '" fill="' + (b.checked ? b.dot : 'oklch(0.984 0.003 247.858)') + '"></path>');
+      var span = a1 - a0;
+      if (span >= 12) {
+        var midA = (a0 + a1) / 2;
+        var midR = (hole + R) / 2;
+        var tp = pol(midR, midA);
+        var lbl = getCat(b.cat).label || '';
+        if (lbl) parts.push('<text x="' + tp[0].toFixed(1) + '" y="' + tp[1].toFixed(1) + '" font-size="11" fill="#fff" text-anchor="middle" dominant-baseline="central" font-family="Pretendard" font-weight="600" opacity="0.9">' + esc(lbl) + '</text>');
+      }
     });
     // Sleep area drawn AFTER schedule segments so it overlaps correctly
     var sleepMin = toMin(presets.sleep), wakeMin = toMin(presets.wake);
@@ -506,17 +514,20 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
 
   function buildColorPicker(selectedKey){
     var resolved = CAT_MIGRATION[selectedKey] || selectedKey || 'slate';
-    var dots = Object.keys(cats).map(function(k){
-      var sel = (k === resolved) ? ' edit-color-dot-sel' : '';
-      return '<div class="edit-color-dot' + sel + '" data-color="' + k + '" style="background:' + cats[k].dot + ';"></div>';
+    var options = Object.keys(cats).map(function(k){
+      return '<div class="edit-color-option' + (k === resolved ? ' edit-color-option-sel' : '') + '" data-color="' + k + '">' +
+        '<span class="edit-color-option-dot" style="background:' + cats[k].dot + ';"></span>' +
+        '<span class="edit-color-option-label">' + cats[k].label + '</span>' +
+      '</div>';
     }).join('');
     return '<div class="edit-color-select" data-field="cat" data-selected="' + resolved + '">' +
       '<div class="edit-color-select-trigger">' +
         '<span class="edit-color-select-preview" style="background:' + cats[resolved].dot + ';"></span>' +
+        '<span class="edit-color-select-lbl">' + cats[resolved].label + '</span>' +
         '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>' +
       '</div>' +
       '<div class="edit-color-dropdown">' +
-        '<div class="edit-color-picker">' + dots + '</div>' +
+        '<div class="edit-color-list">' + options + '</div>' +
       '</div>' +
     '</div>';
   }
@@ -624,15 +635,16 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
         dropdown.style.display = isOpen ? 'none' : 'block';
       });
     });
-    container.querySelectorAll('.edit-color-dot').forEach(function(dot){
-      dot.addEventListener('click', function(e){
+    container.querySelectorAll('.edit-color-option').forEach(function(opt){
+      opt.addEventListener('click', function(e){
         e.stopPropagation();
-        var sel = dot.closest('.edit-color-select');
-        sel.querySelectorAll('.edit-color-dot').forEach(function(d){ d.classList.remove('edit-color-dot-sel'); });
-        dot.classList.add('edit-color-dot-sel');
-        var color = dot.getAttribute('data-color');
+        var sel = opt.closest('.edit-color-select');
+        sel.querySelectorAll('.edit-color-option').forEach(function(o){ o.classList.remove('edit-color-option-sel'); });
+        opt.classList.add('edit-color-option-sel');
+        var color = opt.getAttribute('data-color');
         sel.setAttribute('data-selected', color);
         sel.querySelector('.edit-color-select-preview').style.background = cats[color].dot;
+        sel.querySelector('.edit-color-select-lbl').textContent = cats[color].label;
         sel.querySelector('.edit-color-dropdown').style.display = 'none';
       });
     });
