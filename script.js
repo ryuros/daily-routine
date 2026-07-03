@@ -559,6 +559,8 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
   }
 
   function makeDraggable(body){
+    if (body._dragAttached) return;
+    body._dragAttached = true;
     var dragging = null, ghost = null, placeholder = null;
     function evY(e){ return e.touches ? e.touches[0].clientY : e.clientY; }
     function onStart(e){
