@@ -332,7 +332,7 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
         var midR = (hole + R) / 2;
         var tp = pol(midR, midA);
         var lbl = getCat(b.cat).label || '';
-        if (lbl) parts.push('<text x="' + tp[0].toFixed(1) + '" y="' + tp[1].toFixed(1) + '" font-size="11" fill="#fff" text-anchor="middle" dominant-baseline="central" font-family="Pretendard" font-weight="600" opacity="0.9">' + esc(lbl) + '</text>');
+        if (lbl) parts.push('<text x="' + tp[0].toFixed(1) + '" y="' + tp[1].toFixed(1) + '" font-size="10" fill="#fff" text-anchor="middle" dominant-baseline="central" font-family="Pretendard" font-weight="600" opacity="0.7">' + esc(lbl) + '</text>');
       }
     });
     // Sleep area drawn AFTER schedule segments so it overlaps correctly
