@@ -57,7 +57,7 @@
       <!-- 타임라인 리스트 -->
       <div class="timeline-list">
         <div class="no-print" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:32px;">
-          <button id="applyDefault" style="height:34px; padding:0 14px; border:1px solid oklch(0.929 0.013 255.508); border-radius:999px; background:transparent; cursor:pointer; font-family:inherit; font-size:12.5px; color:oklch(0.446 0.043 257.281);">기본 루틴 적용하기</button>
+          <button id="applyDefault" style="height:34px; padding:0 14px; border:1px solid oklch(0.929 0.013 255.508); border-radius:999px; background:transparent; cursor:pointer; font-family:inherit; font-size:12.5px; color:oklch(0.446 0.043 257.281);">루틴 불러오기</button>
           <div style="display:flex; gap:4px; align-items:center;">
             <button id="resetCurrent" style="width:34px; height:34px; padding:0; border:1px solid oklch(0.929 0.013 255.508); background:transparent; border-radius:999px; cursor:pointer; color:oklch(0.46 0.012 70); display:flex; align-items:center; justify-content:center;" aria-label="초기화">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-4.8"></path></svg>
@@ -72,6 +72,11 @@
       </div>
     </div>
   </article>
+
+  <!-- 현재 루틴 저장하기 -->
+  <div class="no-print" style="text-align:center; padding:0 0 28px;">
+    <button id="saveRoutineBtn" style="height:34px; padding:0 18px; border:1px dashed oklch(0.929 0.013 255.508); border-radius:999px; background:transparent; cursor:pointer; font-family:inherit; font-size:12.5px; color:oklch(0.446 0.043 257.281);">현재 루틴 저장하기</button>
+  </div>
 
   <!-- ============ 1b BOARD ============ -->
   <article id="1b" data-opt="1b" class="optcard" style="display:none;">
@@ -111,6 +116,38 @@
 <div class="tab-floating no-print">
   <button id="btnViewA" class="tab-btn">Timeline</button>
   <button id="btnViewB" class="tab-btn">Board</button>
+</div>
+
+<!-- ===== 루틴 불러오기 모달 ===== -->
+<div id="routineLoadOverlay" class="edit-overlay hidden" role="dialog" aria-modal="true">
+  <div class="routine-modal">
+    <div class="routine-modal-head">
+      <span>루틴 불러오기</span>
+      <button id="routineLoadClose" class="edit-close-btn" aria-label="닫기">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <div class="routine-modal-body" id="routineLoadBody"></div>
+  </div>
+</div>
+
+<!-- ===== 루틴 저장 모달 ===== -->
+<div id="routineSaveOverlay" class="edit-overlay routine-save-overlay hidden" role="dialog" aria-modal="true">
+  <div class="routine-modal routine-save-modal">
+    <div class="routine-modal-head">
+      <span>루틴 저장하기</span>
+      <button id="routineSaveClose" class="edit-close-btn" aria-label="닫기">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <div class="routine-modal-body" style="padding:20px 24px;">
+      <input id="routineNameInput" type="text" placeholder="루틴 이름 입력" maxlength="30">
+    </div>
+    <div class="routine-modal-foot">
+      <button id="routineSaveCancel">취소</button>
+      <button id="routineSaveConfirm">저장</button>
+    </div>
+  </div>
 </div>
 
 <!-- ===== 편집 모달 ===== -->

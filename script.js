@@ -17,15 +17,21 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
 (function(){
   "use strict";
 
-  var STORAGE_KEY = 't_plan_v2';
-  var SCHEDULE_KEY = 't_plan_schedule_v1';
-  var PRESET_KEY   = 't_plan_preset_v1';
+  var STORAGE_KEY   = 't_plan_v2';
+  var SCHEDULE_KEY  = 't_plan_schedule_v1';
+  var PRESET_KEY    = 't_plan_preset_v1';
+  var ROUTINES_KEY  = 't_plan_routines_v1';
   var presets = (function(){
     try { return JSON.parse(localStorage.getItem(PRESET_KEY)) || {}; } catch(e){ return {}; }
   })();
   presets.wake  = presets.wake  || '06:00';
   presets.sleep = presets.sleep || '23:00';
   function savePresets(){ try { localStorage.setItem(PRESET_KEY, JSON.stringify(presets)); } catch(e){} }
+
+  var routines = (function(){
+    try { return JSON.parse(localStorage.getItem(ROUTINES_KEY)) || []; } catch(e){ return []; }
+  })();
+  function saveRoutines(){ try { localStorage.setItem(ROUTINES_KEY, JSON.stringify(routines)); } catch(e){} }
   var RING = 'oklch(0.64 0.05 200)';
   var VIEWS = ['1a'];
 
@@ -96,6 +102,7 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
       checks: JSON.stringify(state.checks),
       schedule: JSON.stringify({ weekday: schedule.weekday, weekend: schedule.weekend }),
       presets: JSON.stringify(presets),
+      routines: JSON.stringify(routines),
       updatedAt: Date.now()
     };
   }
@@ -370,12 +377,108 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
     return { done: done, total: total, pct: pct, ring: 'conic-gradient(' + RING + ' ' + pct + '%, oklch(0.92 0.006 78) 0)' };
   }
 
-  function applyDefaultSchedule(dayType){
-    if (!confirm((dayType === 'weekday' ? '평일' : '주말') + ' 기본 루틴을 적용하면 현재 루틴이 초기화됩니다. 계속할까요?')) return;
-    schedule[dayType] = JSON.parse(JSON.stringify(DEFAULT_SCHEDULE[dayType]));
-    try { localStorage.setItem(SCHEDULE_KEY, JSON.stringify({ weekday: schedule.weekday, weekend: schedule.weekend })); } catch(e){}
+  // ===== 루틴 불러오기 모달 =====
+  function openRoutineLoadModal(){
+    renderRoutineLoadBody();
+    document.getElementById('routineLoadOverlay').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeRoutineLoadModal(){
+    document.getElementById('routineLoadOverlay').classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  function renderRoutineLoadBody(){
+    var body = document.getElementById('routineLoadBody');
+    var html = '<div class="routine-section-label">기본 루틴</div>';
+    ['weekday','weekend'].forEach(function(dt){
+      var label = dt === 'weekday' ? '평일' : '주말';
+      html += '<div class="routine-item" data-rtype="default" data-day="' + dt + '">' +
+        '<div class="routine-item-info">' +
+          '<div class="routine-item-name">기본 루틴 (' + label + ')</div>' +
+          '<div class="routine-item-meta">' + DEFAULT_SCHEDULE[dt].length + '개 항목</div>' +
+        '</div>' +
+      '</div>';
+    });
+    html += '<div class="routine-section-label">저장된 루틴</div>';
+    if (routines.length === 0){
+      html += '<div style="padding:16px 12px; font-size:13px; color:oklch(0.62 0.012 70);">저장된 루틴이 없어요</div>';
+    } else {
+      routines.slice().reverse().forEach(function(r){
+        html += '<div class="routine-item" data-rtype="saved" data-rid="' + r.id + '">' +
+          '<div class="routine-item-info">' +
+            '<div class="routine-item-name">' + esc(r.name) + '</div>' +
+            '<div class="routine-item-meta">' + r.items.length + '개 항목</div>' +
+          '</div>' +
+          '<button class="routine-del-btn" data-rid="' + r.id + '" aria-label="삭제">' +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>' +
+          '</button>' +
+        '</div>';
+      });
+    }
+    body.innerHTML = html;
+
+    body.querySelectorAll('.routine-item').forEach(function(item){
+      item.addEventListener('click', function(e){
+        if (e.target.closest('.routine-del-btn')) return;
+        var day = dayTypeOf(state.selectedDate);
+        var rtype = item.getAttribute('data-rtype');
+        if (rtype === 'default'){
+          var dt = item.getAttribute('data-day');
+          if (!confirm((dt === 'weekday' ? '평일' : '주말') + ' 기본 루틴을 적용하면 현재 루틴이 초기화됩니다. 계속할까요?')) return;
+          schedule[day] = JSON.parse(JSON.stringify(DEFAULT_SCHEDULE[dt]));
+        } else {
+          var rid = item.getAttribute('data-rid');
+          var r = routines.find(function(x){ return x.id === rid; });
+          if (!r) return;
+          if (!confirm('"' + r.name + '" 루틴을 현재 날짜에 적용할까요?')) return;
+          schedule[day] = JSON.parse(JSON.stringify(r.items));
+        }
+        try { localStorage.setItem(SCHEDULE_KEY, JSON.stringify({ weekday: schedule.weekday, weekend: schedule.weekend })); } catch(e){}
+        pushScheduleToCloud();
+        closeRoutineLoadModal();
+        render();
+      });
+    });
+
+    body.querySelectorAll('.routine-del-btn').forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        var rid = btn.getAttribute('data-rid');
+        if (!confirm('이 루틴을 삭제할까요?')) return;
+        routines = routines.filter(function(r){ return r.id !== rid; });
+        saveRoutines();
+        pushScheduleToCloud();
+        renderRoutineLoadBody();
+      });
+    });
+  }
+
+  // ===== 루틴 저장 모달 =====
+  function openRoutineSaveModal(){
+    var d = state.selectedDate;
+    var suggested = (d.getMonth() + 1) + '월 ' + d.getDate() + '일 루틴';
+    var input = document.getElementById('routineNameInput');
+    input.value = suggested;
+    document.getElementById('routineSaveOverlay').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function(){ input.focus(); input.select(); }, 50);
+  }
+  function closeRoutineSaveModal(){
+    document.getElementById('routineSaveOverlay').classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+  function confirmSaveRoutine(){
+    var name = document.getElementById('routineNameInput').value.trim();
+    if (!name){ alert('루틴 이름을 입력해주세요.'); return; }
+    var day = dayTypeOf(state.selectedDate);
+    var items = schedule[day].map(function(b){
+      return { id: b.id, start: b.start, end: b.end || '', cat: b.cat, title: b.title, note: b.note || '' };
+    }).filter(function(b){ return b.title; });
+    routines.push({ id: 'r_' + Date.now(), name: name, createdAt: Date.now(), items: items });
+    saveRoutines();
     pushScheduleToCloud();
-    render();
+    closeRoutineSaveModal();
   }
 
   function applyTabStyles(){
@@ -428,7 +531,8 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
     if (e.target.closest('#printCurrent')){ doPrint(state.activeView); return; }
     if (e.target.closest('#resetCurrent')){ resetOpt(state.activeView); return; }
     if (e.target.closest('#editBtn')){ openEditModal(); return; }
-    if (e.target.id === 'applyDefault'){ applyDefaultSchedule(dayTypeOf(state.selectedDate)); return; }
+    if (e.target.id === 'applyDefault'){ openRoutineLoadModal(); return; }
+    if (e.target.id === 'saveRoutineBtn'){ openRoutineSaveModal(); return; }
   });
 
   var datePickerEl = document.getElementById('datePicker');
@@ -480,6 +584,15 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
           presets.wake  = remotePresets.wake;
           presets.sleep = remotePresets.sleep;
           savePresets();
+        }
+      } catch(e){}
+    }
+    if (typeof data.routines === 'string'){
+      try {
+        var remoteRoutines = JSON.parse(data.routines);
+        if (Array.isArray(remoteRoutines)){
+          routines = remoteRoutines;
+          saveRoutines();
         }
       } catch(e){}
     }
@@ -714,6 +827,21 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
   document.getElementById('editCancel').addEventListener('click', closeEditModal);
   document.getElementById('editSave').addEventListener('click', saveEdit);
   document.getElementById('editAddItem').addEventListener('click', addEditItem);
+
+  document.getElementById('routineLoadOverlay').addEventListener('click', function(e){
+    if (e.target === this) closeRoutineLoadModal();
+  });
+  document.getElementById('routineLoadClose').addEventListener('click', closeRoutineLoadModal);
+
+  document.getElementById('routineSaveOverlay').addEventListener('click', function(e){
+    if (e.target === this) closeRoutineSaveModal();
+  });
+  document.getElementById('routineSaveClose').addEventListener('click', closeRoutineSaveModal);
+  document.getElementById('routineSaveCancel').addEventListener('click', closeRoutineSaveModal);
+  document.getElementById('routineSaveConfirm').addEventListener('click', confirmSaveRoutine);
+  document.getElementById('routineNameInput').addEventListener('keydown', function(e){
+    if (e.key === 'Enter') confirmSaveRoutine();
+  });
 
   function tickClock(){
     var n = new Date();
