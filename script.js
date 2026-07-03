@@ -343,6 +343,10 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
     var sLarge = sleepSpan / 1440 * 360 > 180 ? 1 : 0;
     var sp0 = pol(R, sa0), sp1 = pol(R, sa1adj);
     parts.push('<path d="M ' + cx + ' ' + cy + ' L ' + sp0[0] + ' ' + sp0[1] + ' A ' + R + ' ' + R + ' 0 ' + sLarge + ' 1 ' + sp1[0] + ' ' + sp1[1] + ' Z" fill="oklch(0.372 0.044 257.287)"></path>');
+    var sMidA = sa0 + sleepSpan / 1440 * 360 / 2;
+    var sMidR = (hole + R) / 2;
+    var stp = pol(sMidR, sMidA);
+    parts.push('<text x="' + stp[0].toFixed(1) + '" y="' + stp[1].toFixed(1) + '" font-size="10" fill="#fff" text-anchor="middle" dominant-baseline="central" font-family="Pretendard" font-weight="600" opacity="0.7">취침</text>');
     parts.push('<circle cx="' + cx + '" cy="' + cy + '" r="' + hole + '" fill="#fff"></circle>');
     parts.push('<circle cx="' + cx + '" cy="' + cy + '" r="' + hole + '" fill="none" stroke="oklch(0.93 0.006 78)" stroke-width="1"></circle>');
     for (var h = 0; h < 24; h++){
