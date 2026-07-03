@@ -30,14 +30,14 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
   var VIEWS = ['1a'];
 
   var cats = {
-    meal:      { dot: '#FFD22D', soft: '#FFFBE0', label: 'Meal' },
-    exercise:  { dot: '#00DF72', soft: '#E0FFF2', label: 'Exercise' },
-    study:     { dot: '#00D4F2', soft: '#E0FAFF', label: 'Study' },
-    work:      { dot: '#2B7FFF', soft: '#EBF1FF', label: 'Work' },
-    housework: { dot: '#615FFF', soft: '#EEECFF', label: 'Housework' },
-    hobbies:   { dot: '#FF637E', soft: '#FFE8EC', label: 'Hobbies' },
-    promise:   { dot: '#FF8704', soft: '#FFF3E0', label: 'Promise' },
-    rest:      { dot: '#90A0B9', soft: '#F0F3F6', label: 'Rest' }
+    meal:      { dot: '#FFD22D', soft: '#FFFBE0', label: '일상' },
+    exercise:  { dot: '#00DF72', soft: '#E0FFF2', label: '운동' },
+    study:     { dot: '#00D4F2', soft: '#E0FAFF', label: '공부' },
+    work:      { dot: '#2B7FFF', soft: '#EBF1FF', label: '업무' },
+    housework: { dot: '#615FFF', soft: '#EEECFF', label: '집안일' },
+    hobbies:   { dot: '#FF637E', soft: '#FFE8EC', label: '여가·취미' },
+    promise:   { dot: '#FF8704', soft: '#FFF3E0', label: '약속' },
+    rest:      { dot: '#90A0B9', soft: '#F0F3F6', label: '휴식' }
   };
   // Migration map: old category/color keys → new keys
   var CAT_MIGRATION = {
