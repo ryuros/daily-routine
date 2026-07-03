@@ -29,61 +29,54 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
   var RING = 'oklch(0.64 0.05 200)';
   var VIEWS = ['1a'];
 
-  // Tailwind 400 (dot) / 50 (soft) color palette
   var cats = {
-    red:     { dot: '#f87171', soft: '#fef2f2', label: '빨강' },
-    orange:  { dot: '#fb923c', soft: '#fff7ed', label: '주황' },
-    amber:   { dot: '#fbbf24', soft: '#fffbeb', label: '취미' },
-    yellow:  { dot: '#facc15', soft: '#fefce8', label: '노랑' },
-    lime:    { dot: '#a3e635', soft: '#f7fee7', label: '라임' },
-    green:   { dot: 'oklch(0.841 0.238 128.85)', soft: '#f0fdf4', label: '운동' },
-    emerald: { dot: '#34d399', soft: '#ecfdf5', label: '에메랄드' },
-    teal:    { dot: '#2dd4bf', soft: '#f0fdfa', label: '휴식' },
-    cyan:    { dot: '#22d3ee', soft: '#ecfeff', label: '사이언' },
-    sky:     { dot: '#38bdf8', soft: '#f0f9ff', label: '스카이' },
-    blue:    { dot: '#60a5fa', soft: '#eff6ff', label: '공부' },
-    indigo:  { dot: 'oklch(0.81 0.117 11.638)', soft: '#eef2ff', label: '커리어' },
-    violet:  { dot: '#a78bfa', soft: '#f5f3ff', label: '여가' },
-    purple:  { dot: '#c084fc', soft: '#faf5ff', label: '보라' },
-    fuchsia: { dot: '#e879f9', soft: '#fdf4ff', label: '퓨시아' },
-    pink:    { dot: '#f472b6', soft: '#fdf2f8', label: '핑크' },
-    rose:    { dot: '#fb7185', soft: '#fff1f2', label: '로즈' },
-    slate:   { dot: '#94a3b8', soft: '#f8fafc', label: '일상' }
+    meal:      { dot: '#FFD22D', soft: '#FFFBE0', label: 'Meal' },
+    exercise:  { dot: '#00DF72', soft: '#E0FFF2', label: 'Exercise' },
+    study:     { dot: '#00D4F2', soft: '#E0FAFF', label: 'Study' },
+    work:      { dot: '#2B7FFF', soft: '#EBF1FF', label: 'Work' },
+    housework: { dot: '#615FFF', soft: '#EEECFF', label: 'Housework' },
+    hobbies:   { dot: '#FF637E', soft: '#FFE8EC', label: 'Hobbies' },
+    promise:   { dot: '#FF8704', soft: '#FFF3E0', label: 'Promise' },
+    rest:      { dot: '#90A0B9', soft: '#F0F3F6', label: 'Rest' }
   };
-  // Migration map for old category keys → color key
+  // Migration map: old category/color keys → new keys
   var CAT_MIGRATION = {
-    routine: 'slate', exercise: 'green', study: 'blue',
-    career: 'orange', hobby: 'violet', free: 'teal'
+    routine: 'rest',  exercise: 'exercise', study: 'study',
+    career:  'work',  hobby: 'hobbies',     free: 'hobbies',
+    red: 'hobbies', orange: 'promise', amber: 'hobbies', yellow: 'meal',
+    lime: 'exercise', green: 'exercise', emerald: 'exercise',
+    teal: 'rest', cyan: 'study', sky: 'study', blue: 'study',
+    indigo: 'work', violet: 'hobbies', purple: 'housework',
+    fuchsia: 'hobbies', pink: 'hobbies', rose: 'hobbies', slate: 'rest'
   };
-  function getCat(key){ return cats[key] || cats[CAT_MIGRATION[key]] || cats['slate']; }
+  function getCat(key){ return cats[key] || cats[CAT_MIGRATION[key]] || cats['rest']; }
 
-  // 컬러 가이드: slate=일상·식사, green=운동·산책, blue=공부, indigo=커리어, violet=자유시간, amber=취미
   var DEFAULT_SCHEDULE = {
     weekday: [
-      { id:'wd2',  start:'06:30', end:'07:30', cat:'green',   title:'아침 산책 / 러닝 5km',    note:'가볍게 40분' },
-      { id:'wd3',  start:'07:30', end:'08:30', cat:'teal',   title:'샤워 · 아침 식사' },
-      { id:'wd4',  start:'08:30', end:'10:30', cat:'blue',    title:'한국사 집중 공부',         note:'8월 1급 대비' },
-      { id:'wd5',  start:'10:30', end:'11:00', cat:'teal',   title:'휴식 · 커피' },
-      { id:'wd6',  start:'11:00', end:'12:00', cat:'green',   title:'운동 (PT / 근력+유산소)', note:'주 2회 PT' },
-      { id:'wd7',  start:'12:00', end:'13:30', cat:'teal',   title:'점심 · 충분한 휴식' },
-      { id:'wd8',  start:'13:30', end:'15:30', cat:'indigo',  title:'이직 준비',               note:'이력서·포폴·블렌더·앱·AI' },
-      { id:'wd9',  start:'15:30', end:'17:00', cat:'violet',  title:'자유시간',                note:'독서·낮잠·산책' },
-      { id:'wd10', start:'17:00', end:'18:00', cat:'amber',   title:'기타 연습',               note:'주 2~3회 50분' },
-      { id:'wd11', start:'18:00', end:'19:30', cat:'teal',   title:'저녁 · 휴식' },
-      { id:'wd12', start:'19:30', end:'21:00', cat:'violet',  title:'자유시간',                note:'취미·창작·여가' },
-      { id:'wd13', start:'21:00', end:'22:00', cat:'blue',    title:'한국사 복습 · 독서' },
-      { id:'wd14', start:'22:00', end:'23:00', cat:'teal',   title:'하루 정리 · 내일 계획' }
+      { id:'wd2',  start:'06:30', end:'07:30', cat:'exercise',  title:'아침 산책 / 러닝 5km',    note:'가볍게 40분' },
+      { id:'wd3',  start:'07:30', end:'08:30', cat:'meal',      title:'샤워 · 아침 식사' },
+      { id:'wd4',  start:'08:30', end:'10:30', cat:'study',     title:'한국사 집중 공부',         note:'8월 1급 대비' },
+      { id:'wd5',  start:'10:30', end:'11:00', cat:'rest',      title:'휴식 · 커피' },
+      { id:'wd6',  start:'11:00', end:'12:00', cat:'exercise',  title:'운동 (PT / 근력+유산소)', note:'주 2회 PT' },
+      { id:'wd7',  start:'12:00', end:'13:30', cat:'meal',      title:'점심 · 충분한 휴식' },
+      { id:'wd8',  start:'13:30', end:'15:30', cat:'work',      title:'이직 준비',               note:'이력서·포폴·블렌더·앱·AI' },
+      { id:'wd9',  start:'15:30', end:'17:00', cat:'rest',      title:'자유시간',                note:'독서·낮잠·산책' },
+      { id:'wd10', start:'17:00', end:'18:00', cat:'hobbies',   title:'기타 연습',               note:'주 2~3회 50분' },
+      { id:'wd11', start:'18:00', end:'19:30', cat:'meal',      title:'저녁 · 휴식' },
+      { id:'wd12', start:'19:30', end:'21:00', cat:'hobbies',   title:'자유시간',                note:'취미·창작·여가' },
+      { id:'wd13', start:'21:00', end:'22:00', cat:'study',     title:'한국사 복습 · 독서' },
+      { id:'wd14', start:'22:00', end:'23:00', cat:'rest',      title:'하루 정리 · 내일 계획' }
     ],
     weekend: [
-      { id:'we2',  start:'08:00', end:'09:30', cat:'green',   title:'느긋한 아침 · 산책',              note:'1시간 산책' },
-      { id:'we3',  start:'09:30', end:'11:00', cat:'blue',    title:'한국사 공부 (감 유지)',            note:'가볍게 1.5h' },
-      { id:'we4',  start:'11:00', end:'12:00', cat:'green',   title:'자유 운동 / 러닝 또는 휴식' },
-      { id:'we5',  start:'12:00', end:'14:00', cat:'teal',    title:'점심 · 여유' },
-      { id:'we6',  start:'14:00', end:'16:00', cat:'violet',  title:'취미 · 창작',                    note:'기타·블렌더·만들기' },
-      { id:'we7',  start:'16:00', end:'19:00', cat:'amber',   title:'자유시간',                       note:'외출·약속·문화생활' },
-      { id:'we8',  start:'19:00', end:'20:30', cat:'teal',    title:'저녁' },
-      { id:'we9',  start:'20:30', end:'22:30', cat:'amber',   title:'자유시간 · 독서 · 다음 주 계획' },
-      { id:'we10', start:'22:30', end:'23:00', cat:'teal',    title:'취침 준비' }
+      { id:'we2',  start:'08:00', end:'09:30', cat:'exercise',  title:'느긋한 아침 · 산책',              note:'1시간 산책' },
+      { id:'we3',  start:'09:30', end:'11:00', cat:'study',     title:'한국사 공부 (감 유지)',            note:'가볍게 1.5h' },
+      { id:'we4',  start:'11:00', end:'12:00', cat:'exercise',  title:'자유 운동 / 러닝 또는 휴식' },
+      { id:'we5',  start:'12:00', end:'14:00', cat:'meal',      title:'점심 · 여유' },
+      { id:'we6',  start:'14:00', end:'16:00', cat:'hobbies',   title:'취미 · 창작',                    note:'기타·블렌더·만들기' },
+      { id:'we7',  start:'16:00', end:'19:00', cat:'promise',   title:'자유시간',                       note:'외출·약속·문화생활' },
+      { id:'we8',  start:'19:00', end:'20:30', cat:'meal',      title:'저녁' },
+      { id:'we9',  start:'20:30', end:'22:30', cat:'hobbies',   title:'자유시간 · 독서 · 다음 주 계획' },
+      { id:'we10', start:'22:30', end:'23:00', cat:'rest',      title:'취침 준비' }
     ]
   };
 
@@ -253,11 +246,11 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
   }
 
   function renderBlocksA(arr){
-    var slateC = getCat('slate');
+    var restC = getCat('rest');
     // 기상 preset row
-    var wakeB = { start: presets.wake, durLabel: '', title: '기상', meta: '', dot: 'oklch(0.372 0.044 257.287)', soft: slateC.soft, titleStyle: 'color:oklch(0.28 0.012 70);', isNow: false };
+    var wakeB = { start: presets.wake, durLabel: '', title: '기상', meta: '', dot: 'oklch(0.372 0.044 257.287)', soft: restC.soft, titleStyle: 'color:oklch(0.28 0.012 70);', isNow: false };
     // 취침 preset row
-    var sleepB = { start: presets.sleep, durLabel: '', title: '취침', meta: '', dot: 'oklch(0.372 0.044 257.287)', soft: slateC.soft, titleStyle: 'color:oklch(0.28 0.012 70);', isNow: false };
+    var sleepB = { start: presets.sleep, durLabel: '', title: '취침', meta: '', dot: 'oklch(0.372 0.044 257.287)', soft: restC.soft, titleStyle: 'color:oklch(0.28 0.012 70);', isNow: false };
 
     var html = timelineRow(wakeB, false) +
       arr.map(function(b){ return timelineRow(b, true); }).join('') +
@@ -513,7 +506,8 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
   }
 
   function buildColorPicker(selectedKey){
-    var resolved = CAT_MIGRATION[selectedKey] || selectedKey || 'slate';
+    var resolved = CAT_MIGRATION[selectedKey] || selectedKey || 'rest';
+    if (!cats[resolved]) resolved = 'rest';
     var options = Object.keys(cats).map(function(k){
       return '<div class="edit-color-option' + (k === resolved ? ' edit-color-option-sel' : '') + '" data-color="' + k + '">' +
         '<span class="edit-color-option-dot" style="background:' + cats[k].dot + ';"></span>' +
