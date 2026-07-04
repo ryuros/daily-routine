@@ -657,6 +657,15 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
     renderEditModal();
     document.getElementById('editOverlay').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
+    setTimeout(function(){
+      var section = document.querySelector('.edit-preset-section');
+      if (!section) return;
+      var w = section.clientWidth;
+      ['presetWake','presetSleep'].forEach(function(id){
+        var el = document.getElementById(id);
+        if (el) el.style.maxWidth = Math.floor((w - 10) / 2) + 'px';
+      });
+    }, 0);
   }
 
   function closeEditModal(){
