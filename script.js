@@ -148,7 +148,7 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
     } catch(e){}
   })();
 
-  var state = { selectedDate: todayDate(), activeView: '1a', checks: loadChecks() };
+  var state = { selectedDate: todayDate(), activeView: '1a', checks: loadChecks(), previewAll: false };
 
   function toMin(s){ var p = s.split(':'); return (+p[0]) * 60 + (+p[1]); }
 
@@ -177,11 +177,47 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
     render();
   }
 
+  var _undoToastTimer = null;
+  var _undoSnapshot = null;
+
+  function showUndoToast(onUndo){
+    var existing = document.getElementById('undoToast');
+    if (existing) existing.remove();
+    if (_undoToastTimer) clearTimeout(_undoToastTimer);
+
+    var toast = document.createElement('div');
+    toast.id = 'undoToast';
+    toast.className = 'undo-toast';
+    toast.innerHTML = '체크가 초기화됐어요&nbsp;&nbsp;<button class="undo-toast-btn">되돌리기</button>';
+    document.body.appendChild(toast);
+
+    toast.querySelector('.undo-toast-btn').addEventListener('click', function(){
+      onUndo();
+      dismissToast(toast);
+    });
+
+    _undoToastTimer = setTimeout(function(){ dismissToast(toast); }, 6000);
+  }
+
+  function dismissToast(toast){
+    if (!toast || !toast.parentNode) return;
+    toast.classList.add('hiding');
+    setTimeout(function(){ if (toast.parentNode) toast.remove(); }, 300);
+    if (_undoToastTimer){ clearTimeout(_undoToastTimer); _undoToastTimer = null; }
+  }
+
   function resetOpt(opt){
     var k = dateKey(state.selectedDate);
+    _undoSnapshot = state.checks[k] ? JSON.parse(JSON.stringify(state.checks[k])) : {};
     if (state.checks[k]) delete state.checks[k][opt];
     persistChecks();
     render();
+    showUndoToast(function(){
+      if (!state.checks[k]) state.checks[k] = {};
+      state.checks[k] = JSON.parse(JSON.stringify(_undoSnapshot));
+      persistChecks();
+      render();
+    });
   }
 
   function doPrint(opt){
@@ -332,7 +368,7 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
       var large = (a1 - a0) > 180 ? 1 : 0;
       var p0 = pol(R, a0), p1 = pol(R, a1);
       var d = 'M ' + cx + ' ' + cy + ' L ' + p0[0] + ' ' + p0[1] + ' A ' + R + ' ' + R + ' 0 ' + large + ' 1 ' + p1[0] + ' ' + p1[1] + ' Z';
-      parts.push('<path d="' + d + '" fill="' + (b.checked ? b.dot : 'oklch(0.984 0.003 247.858)') + '"></path>');
+      parts.push('<path d="' + d + '" fill="' + ((state.previewAll || b.checked) ? b.dot : 'oklch(0.984 0.003 247.858)') + '"></path>');
       var span = a1 - a0;
       if (span >= 12) {
         var midA = (a0 + a1) / 2;
@@ -504,9 +540,15 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
     document.getElementById('datePicker').value = dateKey(state.selectedDate);
 
     var pA = prog(blocksA);
-    document.getElementById('pctAclock').textContent = pA.pct + '%';
-    document.getElementById('dayLabelShort').textContent = '진행률';
-    document.getElementById('clockSvgTop').innerHTML = buildClockSvg(blocksA, nowMin, isToday);
+    document.getElementById('pctAclock').textContent = state.previewAll ? '100%' : pA.pct + '%';
+    document.getElementById('dayLabelShort').textContent = state.previewAll ? '미리보기' : '진행률';
+    var clockEl = document.getElementById('clockSvgTop');
+    clockEl.innerHTML = buildClockSvg(blocksA, nowMin, isToday);
+    clockEl.style.cursor = 'pointer';
+    clockEl.onclick = function(){
+      state.previewAll = !state.previewAll;
+      render();
+    };
 
     applyTabStyles();
 

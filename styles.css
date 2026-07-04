@@ -334,6 +334,25 @@ a{ color:inherit; }
   .routine-save-overlay .routine-modal{ border-radius:16px; width:min(400px, 92vw); max-height:none; }
 }
 
+/* Toast */
+.undo-toast{
+  position:fixed; bottom:100px; left:50%; transform:translateX(-50%) translateY(0);
+  z-index:9999;
+  background:oklch(0.26 0.012 70); color:#fff;
+  border-radius:999px; padding:10px 12px 10px 24px;
+  display:flex; align-items:center; gap:24px;
+  font-size:15px; white-space:nowrap;
+  box-shadow:0 4px 20px rgba(0,0,0,0.18);
+  transition:opacity .3s, transform .3s;
+}
+.undo-toast.hiding{ opacity:0; transform:translateX(-50%) translateY(8px); }
+.undo-toast-btn{
+  background:rgba(255,255,255,0.15); border:none;
+  border-radius:999px; cursor:pointer; padding:12px 14px;
+  font-size:13px; font-weight:600; color:#fff;
+  font-family:inherit; flex-shrink:0;
+}
+
 @media print {
   .no-print{ display:none !important; }
   body{ background:#fff; }
