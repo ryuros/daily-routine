@@ -262,7 +262,7 @@ a{ color:inherit; }
   .edit-overlay{ align-items:flex-end; }
   .edit-modal{ width:100%; max-width:100%; border-radius:4px 4px 0 0; max-height:92vh; overflow:hidden; }
   .edit-modal-head{ padding:18px 16px 14px; }
-  .edit-preset-section{ padding:0 16px 14px; gap:10px; overflow:hidden; }
+  .edit-preset-section{ padding:0 16px 14px; gap:10px; overflow:hidden; -webkit-transform:translateZ(0); transform:translateZ(0); }
   .edit-preset-item{ flex:1; min-width:0; align-items:stretch; }
   .edit-preset-input{ width:100%; max-width:calc(100vw - 32px); min-width:0; padding-right:16px; box-sizing:border-box; }
   .edit-modal-body{ padding:0 16px 16px; }
