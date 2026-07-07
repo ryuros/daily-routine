@@ -137,6 +137,7 @@ a{ color:inherit; }
   padding:10px 12px; font-family:inherit; font-size:13px;
   color:oklch(0.30 0.012 70); background:#fff; outline:none; cursor:pointer;
   box-sizing:border-box; text-align:left;
+  -webkit-appearance:none; appearance:none;
 }
 .edit-preset-input::-webkit-calendar-picker-indicator{ display:none; }
 .edit-preset-input:focus{ border-color:oklch(0.62 0.05 220); }
