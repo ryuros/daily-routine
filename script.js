@@ -709,9 +709,9 @@ var syncDocRef = doc(db, "routineSync", SYNC_DOC_ID);
           buildColorPicker(catKey) +
           '<div class="edit-times">' +
             '<div class="edit-time-range">' +
-              '<input class="edit-time-inner" type="time" value="' + esc(start) + '" data-field="start">' +
+              '<input class="edit-time-inner" type="time" step="600" value="' + esc(start) + '" data-field="start">' +
               '<span class="edit-time-range-sep">~</span>' +
-              '<input class="edit-time-inner" type="time" value="' + esc(end || '') + '" data-field="end">' +
+              '<input class="edit-time-inner" type="time" step="600" value="' + esc(end || '') + '" data-field="end">' +
             '</div>' +
           '</div>' +
         '</div>' +
